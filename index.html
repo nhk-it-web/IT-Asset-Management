@@ -13,19 +13,19 @@
         <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+    <!-- Stats -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center;">
         <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
         <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
         <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
     </div>
 
+    <!-- Register -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
             <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
             <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
         </div>
-
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
             <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -35,254 +35,261 @@
         </div>
     </div>
 
-    <!-- Configuration panel: appears after a type is selected -->
+    <!-- Configuration panel (appears after selecting a type) -->
     <div id="configPanel" style="display: none; background-color: #1e293b; border: 1px solid #38bdf8; padding: 1.25rem; border-radius: 0.75rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-            <h2 id="configTitle" style="margin: 0; font-size: 1.1rem; color: #38bdf8;">Configuration</h2>
+        <h2 id="configTitle" style="margin: 0 0 0.75rem; font-size: 1.1rem; color: #38bdf8;">Configuration</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+            <input id="assetName" type="text" placeholder="Name (e.g. Rahim's Laptop)" class="fld">
+            <input id="assetDept" type="text" list="deptList" placeholder="Department (e.g. Accounts)" class="fld">
+            <datalist id="deptList"></datalist>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.85rem; color: #94a3b8;">Details</span>
             <button id="addFieldBtn" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.45rem 0.8rem; cursor: pointer; font-size: 0.8rem;">+ Add Field</button>
         </div>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-                <thead>
-                    <tr style="text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">
-                        <th style="padding: 0.6rem 0.5rem; width: 35%;">Field</th>
-                        <th style="padding: 0.6rem 0.5rem;">Value</th>
-                        <th style="padding: 0.6rem 0.5rem; width: 40px;"></th>
-                    </tr>
-                </thead>
+                <thead><tr style="text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">
+                    <th style="padding: 0.6rem 0.5rem; width: 35%;">Field</th><th style="padding: 0.6rem 0.5rem;">Value</th><th style="width: 40px;"></th>
+                </tr></thead>
                 <tbody id="configBody"></tbody>
             </table>
         </div>
         <button id="registerBtn" style="margin-top: 1rem; width: 100%; background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Asset</button>
     </div>
 
-    <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 0.75rem; overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-            <thead>
-                <tr style="text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">
-                    <th style="padding: 0.9rem 1rem;">ID</th>
-                    <th style="padding: 0.9rem 1rem;">Type</th>
-                    <th style="padding: 0.9rem 1rem;">Configuration</th>
-                    <th style="padding: 0.9rem 1rem;">Status</th>
-                    <th style="padding: 0.9rem 1rem; text-align: right;">Actions</th>
-                </tr>
-            </thead>
-            <tbody id="assetTableBody"></tbody>
-        </table>
-        <p id="emptyMsg" style="text-align: center; color: #64748b; padding: 1.5rem; margin: 0;">No assets yet. Select a type above to register one.</p>
+    <!-- Filters -->
+    <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1rem 1.25rem; border-radius: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+        <input id="filterName" type="text" placeholder="Filter by Name..." class="fld" style="flex: 1; min-width: 180px;">
+        <select id="filterDept" class="fld" style="flex: 1; min-width: 180px; cursor: pointer;"></select>
+        <button id="expandAll" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.65rem 0.9rem; cursor: pointer; font-size: 0.8rem;">Expand all</button>
+        <button id="collapseAll" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.65rem 0.9rem; cursor: pointer; font-size: 0.8rem;">Collapse all</button>
     </div>
+
+    <!-- Type options: click to open the hidden table -->
+    <div id="typeList" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
 </div>
 
-<script>
-    var types = ['Laptop', 'Desktop PC', 'Monitor', 'Printer', 'Router', 'Server', 'Smartphone', 'Keyboard'];
+<style>
+    .fld { box-sizing: border-box; padding: 0.65rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.85rem; outline: none; width: 100%; }
+    .fld:focus { border-color: #38bdf8; }
+</style>
 
-    // Default configuration fields for each preset type
+<script>
     var presetFields = {
-        'Laptop':      ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.', 'Assigned To'],
-        'Desktop PC':  ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.', 'Assigned To'],
-        'Monitor':     ['Brand', 'Model', 'Size', 'Resolution', 'Serial No.'],
-        'Printer':     ['Brand', 'Model', 'Type (Laser/Inkjet)', 'IP Address', 'Serial No.'],
-        'Router':      ['Brand', 'Model', 'IP Address', 'MAC Address', 'Firmware', 'Location'],
-        'Server':      ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'OS', 'IP Address', 'Location'],
-        'Smartphone':  ['Brand', 'Model', 'OS', 'Storage', 'IMEI', 'Assigned To'],
-        'Keyboard':    ['Brand', 'Model', 'Connection (USB/Wireless)']
+        'Laptop':     ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.'],
+        'Desktop PC': ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.'],
+        'Monitor':    ['Brand', 'Model', 'Size', 'Resolution', 'Serial No.'],
+        'Printer':    ['Brand', 'Model', 'Type (Laser/Inkjet)', 'IP Address', 'Serial No.'],
+        'Router':     ['Brand', 'Model', 'IP Address', 'MAC Address', 'Firmware', 'Location'],
+        'Server':     ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'OS', 'IP Address', 'Location'],
+        'Smartphone': ['Brand', 'Model', 'OS', 'Storage', 'IMEI'],
+        'Keyboard':   ['Brand', 'Model', 'Connection (USB/Wireless)']
     };
     var defaultFields = ['Brand', 'Model', 'Serial No.'];
 
+    var types = Object.keys(presetFields);
     var assets = [];
-    var cfgRows = [];   // [{k: 'RAM', v: '16GB'}]
+    var nextId = 1;
+    var openTypes = {};
+    var cfgRows = [];
 
-    var dropdown = document.getElementById('presetTypeDropdown');
-    var tbody = document.getElementById('assetTableBody');
-    var configPanel = document.getElementById('configPanel');
-    var configBody = document.getElementById('configBody');
+    var $ = function (id) { return document.getElementById(id); };
+    var dropdown = $('presetTypeDropdown');
+
+    /* ---------- Save / load (this browser only) ---------- */
+    function save() {
+        try { localStorage.setItem('itAssetsV2', JSON.stringify({ types: types, assets: assets, nextId: nextId })); } catch (e) {}
+    }
+    function load() {
+        try {
+            var d = JSON.parse(localStorage.getItem('itAssetsV2'));
+            if (d) { types = d.types || types; assets = d.assets || []; nextId = d.nextId || 1; }
+        } catch (e) {}
+    }
 
     function esc(s) {
         var d = document.createElement('div');
         d.textContent = s;
         return d.innerHTML;
     }
+    function attr(s) { return esc(s).replace(/"/g, '&quot;'); }
 
+    /* ---------- Dropdown + config panel ---------- */
     function renderDropdown(selected) {
-        dropdown.innerHTML = '';
-        var ph = document.createElement('option');
-        ph.value = '';
-        ph.textContent = '-- Select asset type --';
-        dropdown.appendChild(ph);
-        types.forEach(function (t) {
-            var opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            dropdown.appendChild(opt);
-        });
+        dropdown.innerHTML = '<option value="">-- Select asset type --</option>' +
+            types.map(function (t) { return '<option value="' + attr(t) + '">' + esc(t) + '</option>'; }).join('');
         dropdown.value = selected || '';
     }
 
-    /* ---------- Configuration panel ---------- */
     function loadConfigFor(type) {
-        if (!type) {
-            configPanel.style.display = 'none';
-            cfgRows = [];
-            return;
-        }
-        var fields = presetFields[type] || defaultFields;
-        cfgRows = fields.map(function (f) { return { k: f, v: '' }; });
-        document.getElementById('configTitle').textContent = 'Configuration - ' + type;
+        if (!type) { $('configPanel').style.display = 'none'; cfgRows = []; return; }
+        cfgRows = (presetFields[type] || defaultFields).map(function (f) { return { k: f, v: '' }; });
+        $('configTitle').textContent = 'Configuration - ' + type;
         renderConfig();
-        configPanel.style.display = 'block';
-    }
-
-    function inputStyle() {
-        return 'width:100%; box-sizing:border-box; padding:0.55rem; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:0.4rem; font-size:0.85rem; outline:none;';
+        $('configPanel').style.display = 'block';
     }
 
     function renderConfig() {
-        configBody.innerHTML = '';
-        cfgRows.forEach(function (row, i) {
-            var tr = document.createElement('tr');
-            tr.style.borderBottom = '1px solid #334155';
-            tr.innerHTML =
-                '<td style="padding:0.4rem 0.5rem;"><input data-i="' + i + '" data-part="k" value="' + esc(row.k).replace(/"/g, '&quot;') + '" style="' + inputStyle() + '"></td>' +
-                '<td style="padding:0.4rem 0.5rem;"><input data-i="' + i + '" data-part="v" value="' + esc(row.v).replace(/"/g, '&quot;') + '" placeholder="Write value..." style="' + inputStyle() + '"></td>' +
-                '<td style="padding:0.4rem 0.5rem; text-align:center;"><button data-remove="' + i + '" title="Remove field" style="background:none; border:none; color:#f87171; font-size:1.1rem; cursor:pointer;">&times;</button></td>';
-            configBody.appendChild(tr);
-        });
+        $('configBody').innerHTML = cfgRows.map(function (r, i) {
+            return '<tr style="border-bottom:1px solid #334155;">' +
+                '<td style="padding:0.4rem 0.5rem;"><input class="fld" data-i="' + i + '" data-p="k" value="' + attr(r.k) + '"></td>' +
+                '<td style="padding:0.4rem 0.5rem;"><input class="fld" data-i="' + i + '" data-p="v" value="' + attr(r.v) + '" placeholder="Write value..."></td>' +
+                '<td style="text-align:center;"><button data-rm="' + i + '" style="background:none; border:none; color:#f87171; font-size:1.1rem; cursor:pointer;">&times;</button></td></tr>';
+        }).join('');
     }
 
-    configBody.addEventListener('input', function (e) {
-        var i = e.target.dataset.i;
-        if (i === undefined) return;
-        cfgRows[i][e.target.dataset.part] = e.target.value;
+    $('configBody').addEventListener('input', function (e) {
+        if (e.target.dataset.i !== undefined) cfgRows[e.target.dataset.i][e.target.dataset.p] = e.target.value;
     });
-
-    configBody.addEventListener('click', function (e) {
-        var btn = e.target.closest('button[data-remove]');
-        if (!btn) return;
-        cfgRows.splice(Number(btn.dataset.remove), 1);
+    $('configBody').addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-rm]');
+        if (!b) return;
+        cfgRows.splice(Number(b.dataset.rm), 1);
         renderConfig();
     });
-
-    document.getElementById('addFieldBtn').addEventListener('click', function () {
+    $('addFieldBtn').addEventListener('click', function () {
         cfgRows.push({ k: '', v: '' });
         renderConfig();
-        var inputs = configBody.querySelectorAll('input[data-part="k"]');
-        if (inputs.length) inputs[inputs.length - 1].focus();
+        var l = $('configBody').querySelectorAll('input[data-p="k"]');
+        l[l.length - 1].focus();
     });
+    dropdown.addEventListener('change', function () { loadConfigFor(dropdown.value); });
 
-    dropdown.addEventListener('change', function () {
-        loadConfigFor(dropdown.value);
-    });
-
-    /* ---------- Register asset (saves to server) ---------- */
-    document.getElementById('registerBtn').addEventListener('click', function () {
-        if (!dropdown.value) return;
-        var config = cfgRows
-            .filter(function (r) { return r.k.trim() && r.v.trim(); })
-            .map(function (r) { return { k: r.k.trim(), v: r.v.trim() }; });
-        fetch('/api/assets', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: dropdown.value, config: config })
-        }).then(function () {
-            renderDropdown('');
-            loadConfigFor('');
-            return loadAssets();
-        }).catch(function () { alert('সার্ভারে সেভ হয়নি। সার্ভার চালু আছে কিনা দেখুন।'); });
-    });
-
-    /* ---------- Add custom type ---------- */
     function addCustomType() {
-        var input = document.getElementById('customTypeInput');
-        var name = input.value.trim();
+        var name = $('customTypeInput').value.trim();
         if (!name) return;
-        var match = types.filter(function (t) { return t.toLowerCase() === name.toLowerCase(); })[0];
-        if (!match) {
-            types.push(name);
-            match = name;
-        }
-        renderDropdown(match);
-        loadConfigFor(match);
-        input.value = '';
+        var m = types.filter(function (t) { return t.toLowerCase() === name.toLowerCase(); })[0];
+        if (!m) { types.push(name); m = name; save(); }
+        renderDropdown(m);
+        loadConfigFor(m);
+        renderList();
+        $('customTypeInput').value = '';
     }
-    document.getElementById('addTypeBtn').addEventListener('click', addCustomType);
-    document.getElementById('customTypeInput').addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') addCustomType();
+    $('addTypeBtn').addEventListener('click', addCustomType);
+    $('customTypeInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') addCustomType(); });
+
+    /* ---------- Register ---------- */
+    $('registerBtn').addEventListener('click', function () {
+        var type = dropdown.value;
+        var name = $('assetName').value.trim();
+        if (!type) return;
+        if (!name) { alert('অ্যাসেটের Name লিখুন।'); $('assetName').focus(); return; }
+        assets.push({
+            id: nextId++, type: type, name: name,
+            dept: $('assetDept').value.trim() || 'Unassigned',
+            status: 'Operational',
+            config: cfgRows.filter(function (r) { return r.k.trim() && r.v.trim(); })
+                           .map(function (r) { return { k: r.k.trim(), v: r.v.trim() }; })
+        });
+        openTypes[type] = true;
+        $('assetName').value = '';
+        $('assetDept').value = '';
+        renderDropdown('');
+        loadConfigFor('');
+        save();
+        renderAll();
     });
 
-    /* ---------- Assets table ---------- */
-    function renderTable() {
-        tbody.innerHTML = '';
-        assets.forEach(function (a) {
-            var maint = a.status === 'Maintenance';
-            var cfgHtml = a.config.length
-                ? a.config.map(function (c) {
-                    return '<div style="font-size:0.78rem; line-height:1.5;"><span style="color:#94a3b8;">' + esc(c.k) + ':</span> ' + esc(c.v) + '</div>';
-                  }).join('')
-                : '<span style="color:#64748b;">-</span>';
-            var tr = document.createElement('tr');
-            tr.style.borderBottom = '1px solid #334155';
-            tr.style.verticalAlign = 'top';
-            tr.innerHTML =
-                '<td style="padding:0.9rem 1rem; color:#94a3b8;">AST-' + String(a.id).padStart(3, '0') + '</td>' +
-                '<td style="padding:0.9rem 1rem;">' + esc(a.type) + '</td>' +
-                '<td style="padding:0.9rem 1rem;">' + cfgHtml + '</td>' +
-                '<td style="padding:0.9rem 1rem;"><span style="padding:0.25rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:600; background:' +
-                    (maint ? 'rgba(251,191,36,0.15); color:#fbbf24;' : 'rgba(52,211,153,0.15); color:#34d399;') + '">' + a.status + '</span></td>' +
-                '<td style="padding:0.9rem 1rem; text-align:right; white-space:nowrap;">' +
-                    '<button data-act="toggle" data-id="' + a.id + '" style="background:#334155; color:#fff; border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer; margin-right:0.4rem;">' +
-                        (maint ? 'Mark Operational' : 'Send to Maintenance') + '</button>' +
-                    '<button data-act="delete" data-id="' + a.id + '" style="background:#7f1d1d; color:#fff; border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer;">Delete</button>' +
-                '</td>';
-            tbody.appendChild(tr);
-        });
-        document.getElementById('emptyMsg').style.display = assets.length ? 'none' : 'block';
-        updateStats();
+    /* ---------- Filters ---------- */
+    function renderDeptFilter() {
+        var cur = $('filterDept').value;
+        var depts = [];
+        assets.forEach(function (a) { if (depts.indexOf(a.dept) === -1) depts.push(a.dept); });
+        depts.sort();
+        $('filterDept').innerHTML = '<option value="">All Departments</option>' +
+            depts.map(function (d) { return '<option value="' + attr(d) + '">' + esc(d) + '</option>'; }).join('');
+        $('filterDept').value = depts.indexOf(cur) > -1 ? cur : '';
+        $('deptList').innerHTML = depts.map(function (d) { return '<option value="' + attr(d) + '">'; }).join('');
     }
 
+    $('filterName').addEventListener('input', renderList);
+    $('filterDept').addEventListener('change', renderList);
+    $('expandAll').addEventListener('click', function () { types.forEach(function (t) { openTypes[t] = true; }); renderList(); });
+    $('collapseAll').addEventListener('click', function () { openTypes = {}; renderList(); });
+
+    /* ---------- Type list (accordion of hidden tables) ---------- */
+    function renderList() {
+        var q = $('filterName').value.trim().toLowerCase();
+        var dept = $('filterDept').value;
+        $('typeList').innerHTML = types.map(function (t, ti) {
+            var list = assets.filter(function (a) {
+                return a.type === t &&
+                    (!q || a.name.toLowerCase().indexOf(q) > -1) &&
+                    (!dept || a.dept === dept);
+            });
+            var open = !!openTypes[t];
+            var head =
+                '<button data-toggle="' + ti + '" style="width:100%; display:flex; justify-content:space-between; align-items:center; background:#1e293b; border:1px solid ' + (open ? '#38bdf8' : '#334155') + '; color:#e2e8f0; padding:0.95rem 1.1rem; border-radius:' + (open ? '0.75rem 0.75rem 0 0' : '0.75rem') + '; font-size:1rem; font-weight:600; cursor:pointer;">' +
+                '<span>' + esc(t) + ' <span style="margin-left:0.5rem; font-size:0.75rem; font-weight:700; padding:0.15rem 0.55rem; border-radius:999px; background:#0f172a; color:#38bdf8;">' + list.length + '</span></span>' +
+                '<span style="color:#94a3b8;">' + (open ? '&#9662;' : '&#9656;') + '</span></button>';
+            if (!open) return '<div>' + head + '</div>';
+            var rows = list.length ? list.map(rowHtml).join('') :
+                '<tr><td colspan="6" style="padding:1.2rem; text-align:center; color:#64748b;">No assets found.</td></tr>';
+            return '<div>' + head +
+                '<div style="background:#1e293b; border:1px solid #38bdf8; border-top:none; border-radius:0 0 0.75rem 0.75rem; overflow-x:auto;">' +
+                '<table style="width:100%; border-collapse:collapse; font-size:0.875rem;"><thead><tr style="text-align:left; color:#94a3b8; border-bottom:1px solid #334155;">' +
+                '<th style="padding:0.8rem 1rem;">ID</th><th style="padding:0.8rem 1rem;">Name</th><th style="padding:0.8rem 1rem;">Department</th><th style="padding:0.8rem 1rem;">Configuration</th><th style="padding:0.8rem 1rem;">Status</th><th style="padding:0.8rem 1rem; text-align:right;">Actions</th></tr></thead>' +
+                '<tbody>' + rows + '</tbody></table></div></div>';
+        }).join('');
+    }
+
+    function rowHtml(a) {
+        var maint = a.status === 'Maintenance';
+        var cfg = a.config.length ? a.config.map(function (c) {
+            return '<div style="font-size:0.78rem; line-height:1.5;"><span style="color:#94a3b8;">' + esc(c.k) + ':</span> ' + esc(c.v) + '</div>';
+        }).join('') : '<span style="color:#64748b;">-</span>';
+        return '<tr style="border-bottom:1px solid #334155; vertical-align:top;">' +
+            '<td style="padding:0.8rem 1rem; color:#94a3b8;">AST-' + String(a.id).padStart(3, '0') + '</td>' +
+            '<td style="padding:0.8rem 1rem; font-weight:600;">' + esc(a.name) + '</td>' +
+            '<td style="padding:0.8rem 1rem;">' + esc(a.dept) + '</td>' +
+            '<td style="padding:0.8rem 1rem;">' + cfg + '</td>' +
+            '<td style="padding:0.8rem 1rem;"><span style="padding:0.25rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:600; background:' +
+                (maint ? 'rgba(251,191,36,0.15); color:#fbbf24;' : 'rgba(52,211,153,0.15); color:#34d399;') + '">' + a.status + '</span></td>' +
+            '<td style="padding:0.8rem 1rem; text-align:right; white-space:nowrap;">' +
+                '<button data-act="status" data-id="' + a.id + '" style="background:#334155; color:#fff; border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer; margin-right:0.4rem;">' + (maint ? 'Mark Operational' : 'Send to Maintenance') + '</button>' +
+                '<button data-act="del" data-id="' + a.id + '" style="background:#7f1d1d; color:#fff; border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer;">Delete</button></td></tr>';
+    }
+
+    $('typeList').addEventListener('click', function (e) {
+        var t = e.target.closest('button[data-toggle]');
+        if (t) {
+            var name = types[Number(t.dataset.toggle)];
+            openTypes[name] = !openTypes[name];
+            renderList();
+            return;
+        }
+        var b = e.target.closest('button[data-act]');
+        if (!b) return;
+        var id = Number(b.dataset.id);
+        if (b.dataset.act === 'del') {
+            if (!confirm('এই অ্যাসেটটা মুছে ফেলবেন?')) return;
+            assets = assets.filter(function (a) { return a.id !== id; });
+        } else {
+            assets.forEach(function (a) { if (a.id === id) a.status = a.status === 'Operational' ? 'Maintenance' : 'Operational'; });
+        }
+        save();
+        renderAll();
+    });
+
+    /* ---------- Stats ---------- */
     function updateStats() {
         var total = assets.length;
         var maint = assets.filter(function (a) { return a.status === 'Maintenance'; }).length;
-        var pct = total === 0 ? 100 : Math.round(((total - maint) / total) * 100);
-        document.getElementById('statTotal').textContent = total;
-        document.getElementById('statOperational').textContent = pct + '%';
-        document.getElementById('statInService').textContent = maint;
+        $('statTotal').textContent = total;
+        $('statOperational').textContent = (total === 0 ? 100 : Math.round(((total - maint) / total) * 100)) + '%';
+        $('statInService').textContent = maint;
     }
 
-    tbody.addEventListener('click', function (e) {
-        var btn = e.target.closest('button');
-        if (!btn) return;
-        var id = Number(btn.dataset.id);
-        var req;
-        if (btn.dataset.act === 'delete') {
-            req = fetch('/api/assets/' + id, { method: 'DELETE' });
-        } else {
-            var cur = assets.filter(function (a) { return a.id === id; })[0];
-            var next = cur.status === 'Operational' ? 'Maintenance' : 'Operational';
-            req = fetch('/api/assets/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: next })
-            });
-        }
-        req.then(loadAssets).catch(function () { alert('সার্ভারে সেভ হয়নি। সার্ভার চালু আছে কিনা দেখুন।'); });
-    });
-
-    /* ---------- Load saved data from server ---------- */
-    function loadAssets() {
-        return fetch('/api/assets').then(function (r) { return r.json(); }).then(function (list) {
-            assets = list;
-            var sel = dropdown.value;
-            assets.forEach(function (a) { if (types.indexOf(a.type) === -1) types.push(a.type); });
-            renderDropdown(sel);
-            renderTable();
-        });
+    function renderAll() {
+        renderDeptFilter();
+        renderList();
+        updateStats();
     }
 
+    load();
     renderDropdown('');
-    renderTable();
-    loadAssets().catch(function () {
-        document.getElementById('emptyMsg').textContent = 'সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না।';
-    });
+    renderAll();
 </script>
 </body>
 </html>
