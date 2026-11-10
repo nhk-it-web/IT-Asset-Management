@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Asset Management System</title>
+    <!-- Tailwind CSS for Premium Graphical Styling -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        @import url('https://googleapis.com');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- Top App Bar Banner -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">AMS ENTERPRISE</h1>
+                <p class="text-slate-400 text-sm mt-1">Cloud-Connected Asset Operations & Tracking Suite</p>
+            </div>
+            <div class="flex items-center gap-2 bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/20 text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Secure Cloud Vault Connected
+            </div>
+        </div>
+
+        <!-- Premium Graphical Live Dashboard -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Metric 1: Total Assets -->
+            <div class="bg-slate-800/50 p-5 rounded-2xl border border-slate-800/80 flex items-center justify-between backdrop-blur-md">
+                <div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Total Infrastructure</span>
+                    <span class="text-4xl font-extrabold text-slate-100 mt-1 block" id="statTotal">0</span>
+                </div>
+                <div class="p-4 bg-indigo-500/10 text-indigo-400 rounded-xl text-2xl border border-indigo-500/20">📦</div>
+            </div>
+            <!-- Metric 2: Available Status -->
+            <div class="bg-slate-800/50 p-5 rounded-2xl border border-slate-800/80 flex items-center justify-between backdrop-blur-md">
+                <div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Available Items</span>
+                    <span class="text-4xl font-extrabold text-emerald-400 mt-1 block" id="statAvailable">0</span>
+                </div>
+                <div class="p-4 bg-emerald-500/10 text-emerald-400 rounded-xl text-2xl border border-emerald-500/20">✅</div>
+            </div>
+            <!-- Metric 3: Assigned Status -->
+            <div class="bg-slate-800/50 p-5 rounded-2xl border border-slate-800/80 flex items-center justify-between backdrop-blur-md">
+                <div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Assigned / In Use</span>
+                    <span class="text-4xl font-extrabold text-cyan-400 mt-1 block" id="statAssigned">0</span>
+                </div>
+                <div class="p-4 bg-cyan-500/10 text-cyan-400 rounded-xl text-2xl border border-cyan-500/20">👤</div>
+            </div>
+            <!-- Metric 4: Maintenance Status -->
+            <div class="bg-slate-800/50 p-5 rounded-2xl border border-slate-800/80 flex items-center justify-between backdrop-blur-md">
+                <div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Under Maintenance</span>
+                    <span class="text-4xl font-extrabold text-rose-400 mt-1 block" id="statMaintenance">0</span>
+                </div>
+                <div class="p-4 bg-rose-500/10 text-rose-400 rounded-xl text-2xl border border-rose-500/20">🛠️</div>
+            </div>
+        </div>
+
+        <!-- Master Workspace Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Command Panel Forms -->
+            <div class="space-y-6">
+                
+                <!-- Section A: Register New Assets -->
+                <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-md space-y-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-200">Register New Asset</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Input physical hardware attributes below</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Asset Model Name</label>
+                            <input id="assetName" type="text" placeholder="e.g. MacBook Pro M3 Max" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Category</label>
+                            <select id="assetType" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                                <!-- Populated dynamically dynamically -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Assign to Employee</label>
+                            <input id="employee" type="text" placeholder="Leave blank if Available" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Purchase Date</label>
+                                <input id="purchaseDate" type="date" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost (USD)</label>
+                                <input id="assetPrice" type="number" placeholder="1499" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                            </div>
+                        </div>
+                        <button onclick="addAsset()" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold p-3.5 rounded-xl shadow-lg shadow-indigo-600/10 transition-all active:scale-[0.99] cursor-pointer">
+                            Commit Asset to Vault
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section B: Custom Categories Generator -->
+                <div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-md space-y-4">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-200">Custom Category Engine</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Inject customized operational categories dynamically</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <input id="customCategoryInput" type="text" placeholder="e.g. Router, Server Rack" class="flex-1 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                        <button onclick="addCustomCategory()" class="bg-slate-700 hover:bg-slate-600 text-slate-100 px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-600 active:scale-95 transition-all cursor-pointer">
+                            Add Type
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Panel: Main Hardware Ledger Grid Log -->
+            <div class="lg:col-span-2 bg-slate-800/30 p-6 rounded-2xl border border-slate-800/80 backdrop-blur-md flex flex-col">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-200">Master Hardware Ledger</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Real-time tracking grid query records</p>
+                    </div>
+                    <input id="searchBox" type="text" oninput="renderTable()" placeholder="🔍 Live query by asset name or user..." class="w-full sm:w-72 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all">
+                </div>
+                
+                <div class="overflow-x-auto rounded-xl border border-slate-800">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
