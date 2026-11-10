@@ -1,39 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Asset Management System</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Asset Management System</title>
 </head>
 <body style="font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
 
-    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
-        
-        <!-- Header Title -->
-        <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.5rem;">
-            <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
-        </div>
-        
-        <!-- Stats Counter Dashboard Widgets -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
-            <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
-            <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
+<div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+
+    <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.5rem;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+        <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
+        <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
+        <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
+            <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
         </div>
 
-        <!-- 1. Asset Type Registers Grid Workspaces Layout -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            
-            <!-- Preset Category Selection Box Block -->
-            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
-                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Preset</button>
-                </div>
+        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <input id="customTypeInput" type="text" placeholder="e.g. Projector" style="width: 100%; box-sizing: border-box; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
+                <button id="addTypeBtn" style="background-color: #9333ea; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Add Type</button>
             </div>
+        </div>
+    </div>
 
-            <!-- Add Custom Type Block Input Panel -->
-            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
-                <div style="display: flex; flex-direction: column; gap:
+    <!-- Configuration panel: appears after a type is selected -->
+    <div id="configPanel" style="display: none; background-color: #1e293b; border: 1px solid #38bdf8; padding: 1.25rem; border-radius: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+            <h2 id="configTitle" style="margin: 0; font-size: 1.1rem; color: #38bdf8;">Configuration</h2>
+            <button id="addFieldBtn" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.45rem 0.8rem; cursor: pointer; font-size: 0.8rem;">+ Add Field</button>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                <thead>
+                    <tr style="text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">
+                        <th style="padding: 0.6rem 0.5rem; width: 35%;">Field</th>
+                        <th style="padding: 0.6rem 0.5rem;">Value</th>
+                        <th style="padding: 0.6rem 0.5rem; width: 40px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="configBody"></tbody>
+            </table>
+        </div>
+        <button id="registerBtn" style="margin-top: 1rem; width: 100%; background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Asset</button>
+    </div>
+
+    <div style="background-color: #1e293b; border: 1px solid #334155; border-radius: 0.75rem; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+            <thead>
+                <tr style="text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">
+                    <th style="padding: 0.9rem 1rem;">ID</th>
+                    <th style="padding: 0.9rem 1rem;">Type</th>
+                    <th style="padding: 0.9rem 1rem;">Configuration</th>
+                    <th style="padding: 0.9rem 1rem;">Status</th>
+                    <th style="padding: 0.9rem 1rem; text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="assetTableBody"></tbody>
+        </table>
+        <p id="emptyMsg" style="text-align: center; color: #64748b; padding: 1.5rem; margin: 0;">No assets yet. Select a type above to register one.</p>
+    </div>
+</div>
+
+<script>
+    var types = ['Laptop', 'Desktop PC', 'Monitor', 'Printer', 'Router', 'Server', 'Smartphone', 'Keyboard'];
+
+    // Default configuration fields for each preset type
+    var presetFields = {
+        'Laptop':      ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.', 'Assigned To'],
+        'Desktop PC':  ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.', 'Assigned To'],
+        'Monitor':     ['Brand', 'Model', 'Size', 'Resolution', 'Serial No.'],
+        'Printer':     ['Brand', 'Model', 'Type (Laser/Inkjet)', 'IP Address', 'Serial No.'],
+        'Router':      ['Brand', 'Model', 'IP Address', 'MAC Address', 'Firmware', 'Location'],
+        'Server':      ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'OS', 'IP Address', 'Location'],
+        'Smartphone':  ['Brand', 'Model', 'OS', 'Storage', 'IMEI', 'Assigned To'],
+        'Keyboard':    ['Brand', 'Model', 'Connection (USB/Wireless)']
+    };
+    var defaultFields = ['Brand', 'Model', 'Serial No.'];
+
+    var assets = [];
+    var cfgRows = [];   // [{k: 'RAM', v: '16GB'}]
+
+    var dropdown = document.getElementById('presetTypeDropdown');
+    var tbody = document.getElementById('assetTableBody');
+    var configPanel = document.getElementById('configPanel');
+    var configBody = document.getElementById('configBody');
+
+    function esc(s) {
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    function renderDropdown(selected) {
+        dropdown.innerHTML = '';
+        var ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = '-- Select asset type --';
+        dropdown.appendChild(ph);
+        types.forEach(function (t) {
+            var opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            dropdown.appendChild(opt);
+        });
+        dropdown.value = selected || '';
+    }
+
+    /* ---------- Configuration panel ---------- */
+    function loadConfigFor(type) {
+        if (!type) {
+            configPanel.style.display = 'none';
+            cfgRows = [];
+            return;
+        }
+        var fields = presetFields[type] || defaultFields;
+        cfgRows = fields.map(function (f) { return { k: f, v: '' }; });
+        document.getElementById('configTitle').textContent = 'Configuration - ' + type;
+        renderConfig();
+        configPanel.style.display = 'block';
+    }
+
+    function inputStyle() {
+        return 'width:100%; box-sizing:border-box; padding:0.55rem; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:0.4rem; font-size:0.85rem; outline:none;';
+    }
+
+    function renderConfig() {
+        configBody.innerHTML = '';
+        cfgRows.forEach(function (row, i) {
+            var tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid #334155';
+            tr.innerHTML =
+                '<td style="padding:0.4rem 0.5rem;"><input data-i="' + i + '" data-part="k" value="' + esc(row.k).replace(/"/g, '&quot;') + '" style="' + inputStyle() + '"></td>' +
+                '<td style="padding:0.4rem 0.5rem;"><input data-i="' + i + '" data-part="v" value="' + esc(row.v).replace(/"/g, '&quot;') + '" placeholder="Write value..." style="' + inputStyle() + '"></td>' +
+                '<td style="padding:0.4rem 0.5rem; text-align:center;"><button data-remove="' + i + '" title="Remove field" style="background:none; border:none; color:#f87171; font-size:1.1rem; cursor:pointer;">&times;</button></td>';
+            configBody.appendChild(tr);
+        });
+    }
+
+    configBody.addEventListener('input', function (e) {
+        var i = e.target.dataset.i;
+        if (i === undefined) return;
+        cfgRows[i][e.target.dataset.part] = e.target.value;
+    });
+
+    configBody.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-remove]');
+        if (!btn) return;
+        cfgRows.splice(Number(btn.dataset.remove), 1);
+        renderConfig();
+    });
+
+    document.getElementById('addFieldBtn').addEventListener('click', function () {
+        cfgRows.push({ k: '', v: '' });
+        renderConfig();
+        var inputs = configBody.querySelectorAll('input[data-part="k"]');
+        if (inputs.length) inputs[inputs.length - 1].focus();
+    });
+
+    dropdown.addEventListener('change', function () {
+        loadConfigFor(dropdown.value);
+    });
+
+    /* ---------- Register asset (saves to server) ---------- */
+    document.getElementById('registerBtn').addEventListener('click', function () {
+        if (!dropdown.value) return;
+        var config = cfgRows
+            .filter(function (r) { return r.k.trim() && r.v.trim(); })
+            .map(function (r) { return { k: r.k.trim(), v: r.v.trim() }; });
+        fetch('/api/assets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: dropdown.value, config: config })
+        }).then(function () {
+            renderDropdown('');
+            loadConfigFor('');
+            return loadAssets();
+        }).catch(function () { alert('সার্ভারে সেভ হয়নি। সার্ভার চালু আছে কিনা দেখুন।'); });
+    });
+
+    /* ---------- Add custom type ---------- */
+    function addCustomType() {
+        var input = document.getElementById('customTypeInput');
+        var name = input.value.trim();
+        if (!name) return;
+        var match = types.filter(function (t) { return t.toLowerCase() === name.toLowerCase(); })[0];
+        if (!match) {
+            types.push(name);
+            match = name;
+        }
+        renderDropdown(match);
+        loadConfigFor(match);
+        input.value = '';
+    }
+    document.getElementById('addTypeBtn').addEventListener('click', addCustomType);
+    document.getElementById('customTypeInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') addCustomType();
+    });
+
+    /* ---------- Assets table ---------- */
+    function renderTable() {
+        tbody.innerHTML = '';
+        assets.forEach(function (a) {
+            var maint = a.status === 'Maintenance';
+            var cfgHtml = a.config.length
+                ? a.config.map(function (c) {
+                    return '<div style="font-size:0.78rem; line-height:1.5;"><span style="color:#94a3b8;">' + esc(c.k) + ':</span> ' + esc(c.v) + '</div>';
+                  }).join('')
+                : '<span style="color:#64748b;">-</span>';
+            var tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid #334155';
+            tr.style.verticalAlign = 'top';
+            tr.innerHTML =
+                '<td style="padding:0.9rem 1rem; color:#94a3b8;">AST-' + String(a.id).padStart(3, '0') + '</td>' +
+                '<td style="padding:0.9rem 1rem;">' + esc(a.type) + '</td>' +
+                '<td style="padding:0.9rem 1rem;">' + cfgHtml + '</td>' +
+                '<td style="padding:0.9rem 1rem;"><span style="padding:0.25rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:600; background:' +
+                    (maint ? 'rgba(251,191,36,0.15); color:#fbbf24;' : 'rgba(52,211,153,0.15); color:#34d399;') + '">' + a.status + '</span></td>' +
+                '<td style="padding:0.9rem 1rem; text-align:right; white-space:nowrap;">' +
+                    '<button data-act="toggle" data-id="' + a.id + '" style="background:#334155; color:#fff; border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer; margin-right:0.4rem;">' +
+                        (maint ? 'Mark Operational' : 'Send to Maintenance') + '</button>' +
+                    '<button data-act="delete" data-id="' + a.id + '" style="background:#7f1d1d; color:#fff; border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer;">Delete</button>' +
+                '</td>';
+            tbody.appendChild(tr);
+        });
+        document.getElementById('emptyMsg').style.display = assets.length ? 'none' : 'block';
+        updateStats();
+    }
+
+    function updateStats() {
+        var total = assets.length;
+        var maint = assets.filter(function (a) { return a.status === 'Maintenance'; }).length;
+        var pct = total === 0 ? 100 : Math.round(((total - maint) / total) * 100);
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statOperational').textContent = pct + '%';
+        document.getElementById('statInService').textContent = maint;
+    }
+
+    tbody.addEventListener('click', function (e) {
+        var btn = e.target.closest('button');
+        if (!btn) return;
+        var id = Number(btn.dataset.id);
+        var req;
+        if (btn.dataset.act === 'delete') {
+            req = fetch('/api/assets/' + id, { method: 'DELETE' });
+        } else {
+            var cur = assets.filter(function (a) { return a.id === id; })[0];
+            var next = cur.status === 'Operational' ? 'Maintenance' : 'Operational';
+            req = fetch('/api/assets/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: next })
+            });
+        }
+        req.then(loadAssets).catch(function () { alert('সার্ভারে সেভ হয়নি। সার্ভার চালু আছে কিনা দেখুন।'); });
+    });
+
+    /* ---------- Load saved data from server ---------- */
+    function loadAssets() {
+        return fetch('/api/assets').then(function (r) { return r.json(); }).then(function (list) {
+            assets = list;
+            var sel = dropdown.value;
+            assets.forEach(function (a) { if (types.indexOf(a.type) === -1) types.push(a.type); });
+            renderDropdown(sel);
+            renderTable();
+        });
+    }
+
+    renderDropdown('');
+    renderTable();
+    loadAssets().catch(function () {
+        document.getElementById('emptyMsg').textContent = 'সার্ভারের সাথে যোগাযোগ করা যাচ্ছে না।';
+    });
+</script>
+</body>
+</html>
