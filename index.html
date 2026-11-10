@@ -3,135 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next-Gen Asset Management Suite</title>
-    <!-- Tailwind CSS for Advanced Visual Architecture -->
-    <script src="https://jsdelivr.net"></script>
+    <title>Enterprise Asset Manager</title>
+    <!-- Tailwind CSS for Minimalist Architecture -->
+    <script src="https://tailwindcss.com"></script>
     <style>
         @import url('https://googleapis.com');
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #0b0f19;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
-        }
-        .glass-panel {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .neon-glow-indigo {
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen p-4 md:p-8">
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen p-4 md:p-8">
 
-    <div class="max-w-7xl mx-auto space-y-8">
+    <div class="max-w-6xl mx-auto space-y-8">
         
-        <!-- Premium Animated Top Command Bar Header -->
-        <div class="glass-panel neon-glow-indigo flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-6 rounded-2xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-indigo-500 via-cyan-500 to-purple-500"></div>
+        <!-- Minimal Corporate Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-6">
             <div>
-                <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">AMS NEXUS</h1>
-                <p class="text-slate-400 text-sm mt-1">Next-Gen Cybernetic Asset Operations Ledger</p>
+                <h1 class="text-2xl font-bold tracking-tight text-slate-900">Asset Management</h1>
+                <p class="text-sm text-slate-500 mt-0.5">Manage and track your company infrastructure hardware.</p>
             </div>
-            <div class="flex items-center gap-2 bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-full border border-indigo-500/20 text-xs font-semibold backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#22d3ee]"></span>
-                Cloud Pipeline Operational
+            <div class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg border border-emerald-200 text-xs font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                System Cloud Sync Active
             </div>
         </div>
 
-        <!-- High-Tech Stats Dashboard Displays -->
+        <!-- Clean Metric Dashboard Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <!-- Total Matrix -->
-            <div class="glass-panel p-5 rounded-2xl flex items-center justify-between border-l-4 border-indigo-500 hover:border-indigo-400 transition-all">
-                <div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Total Infrastructure</span>
-                    <span class="text-4xl font-extrabold text-slate-100 mt-1 block tracking-tight" id="statTotal">0</span>
-                </div>
-                <div class="p-3.5 bg-indigo-500/10 text-indigo-400 rounded-xl text-xl border border-indigo-500/20">📦</div>
+            <!-- Total -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Total Infrastructure</span>
+                <span class="text-3xl font-bold text-slate-900 mt-1 block" id="statTotal">0</span>
             </div>
-            <!-- Available Matrix -->
-            <div class="glass-panel p-5 rounded-2xl flex items-center justify-between border-l-4 border-emerald-500 hover:border-emerald-400 transition-all">
-                <div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Available Vault</span>
-                    <span class="text-4xl font-extrabold text-emerald-400 mt-1 block tracking-tight" id="statAvailable">0</span>
-                </div>
-                <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-xl text-xl border border-emerald-500/20">✅</div>
+            <!-- Available -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Available</span>
+                <span class="text-3xl font-bold text-slate-900 mt-1 block" id="statAvailable">0</span>
             </div>
-            <!-- Assigned Matrix -->
-            <div class="glass-panel p-5 rounded-2xl flex items-center justify-between border-l-4 border-cyan-500 hover:border-cyan-400 transition-all">
-                <div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Deployed / Assigned</span>
-                    <span class="text-4xl font-extrabold text-cyan-400 mt-1 block tracking-tight" id="statAssigned">0</span>
-                </div>
-                <div class="p-3.5 bg-cyan-500/10 text-cyan-400 rounded-xl text-xl border border-cyan-500/20">👤</div>
+            <!-- Assigned -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Assigned / In Use</span>
+                <span class="text-3xl font-bold text-slate-900 mt-1 block" id="statAssigned">0</span>
             </div>
-            <!-- Maintenance Matrix -->
-            <div class="glass-panel p-5 rounded-2xl flex items-center justify-between border-l-4 border-rose-500 hover:border-rose-400 transition-all">
-                <div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Under Maintenance</span>
-                    <span class="text-4xl font-extrabold text-rose-400 mt-1 block tracking-tight" id="statMaintenance">0</span>
-                </div>
-                <div class="p-3.5 bg-rose-500/10 text-rose-400 rounded-xl text-xl border border-rose-500/20">🛠️</div>
+            <!-- Maintenance -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Maintenance</span>
+                <span class="text-3xl font-bold text-slate-900 mt-1 block" id="statMaintenance">0</span>
             </div>
         </div>
 
-        <!-- Master Workspace Layout Grid -->
+        <!-- Main Workspace Section -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- Left Command Panel Forms -->
+            <!-- Left Command Forms Panel -->
             <div class="space-y-6">
-                
-                <!-- Component Form: Register Assets -->
-                <div class="glass-panel p-6 rounded-2xl space-y-4 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none"></div>
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-200">Register Asset</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Inject physical hardware metrics below</p>
-                    </div>
+                <!-- Asset Creation Form -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4">
+                    <h2 class="text-base font-semibold text-slate-900">Add New Asset</h2>
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Asset Model Name</label>
-                            <input id="assetName" type="text" placeholder="e.g. Surface Laptop Studio" class="w-full p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all focus:border-transparent">
+                            <label class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Device Model Name</label>
+                            <input id="assetName" type="text" placeholder="e.g. MacBook Pro M3" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all placeholder:text-slate-300">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Category</label>
-                            <select id="assetType" class="w-full p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all focus:border-transparent">
-                                <!-- Populated dynamically -->
+                            <label class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Category</label>
+                            <select id="assetType" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all">
+                                <!-- Dynamic Options -->
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Custodian Employee</label>
-                            <input id="employee" type="text" placeholder="Leave empty if Available" class="w-full p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all focus:border-transparent">
+                            <label class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Custodian Employee</label>
+                            <input id="employee" type="text" placeholder="Leave empty if Available" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all placeholder:text-slate-300">
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Purchase Date</label>
-                                <input id="purchaseDate" type="date" class="w-full p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all focus:border-transparent">
+                                <label class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Purchase Date</label>
+                                <input id="purchaseDate" type="date" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Cost (USD)</label>
-                                <input id="assetPrice" type="number" placeholder="1299" class="w-full p-3 bg-slate-950/60 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all focus:border-transparent">
+                                <label class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Cost (USD)</label>
+                                <input id="assetPrice" type="number" placeholder="1200" class="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all placeholder:text-slate-300">
                             </div>
                         </div>
-                        <button onclick="addAsset()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold p-3.5 rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.99] cursor-pointer text-sm tracking-wide">
-                            Commit Asset Record
+                        <button onclick="addAsset()" class="w-full bg-slate-900 text-white font-medium p-2.5 rounded-lg hover:bg-slate-800 transition-all text-sm cursor-pointer shadow-xs">
+                            Save Asset Record
                         </button>
                     </div>
                 </div>
 
-                <!-- Component Form: Custom Categories Engine -->
-                <div class="glass-panel p-6 rounded-2xl space-y-4">
-                    <div>
-                        <h2 class="text-base font-bold text-slate-200">Category Configurator</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">Inject tailored enterprise operational clusters</p>
-                    </div>
+                <!-- Custom Category Creation Form -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                    <h2 class="text-base font-semibold text-slate-900">Custom Category Engine</h2>
                     <div class="flex gap-2">
-                        <input id="customCategoryInput" type="text" placeholder="e.g. Router, Server Rack" class="flex-1 p-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-100 transition-all focus:border-transparent">
-                        <button onclick="addCustomCategory()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-700 active:scale-95 transition-all cursor-pointer">
-                            Inject
+                        <input id="customCategoryInput" type="text" placeholder="e.g. Router, Server" class="flex-1 p-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 transition-all placeholder:text-slate-300">
+                        <button onclick="addCustomCategory()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium border border-slate-200 transition-all cursor-pointer">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Main Grid Database View -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex flex-col">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-900">Hardware Ledger</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Real-time localized encrypted log matrix</p>
+                    </div>
+                    <input id="searchBox" type="text" oninput="renderTable()" placeholder="🔍 Search records..." class="w-full sm:w-64 p-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:bg-white transition-all">
+                </div>
+                
+                <div class="overflow-x-auto rounded-lg border border-slate-200">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                                <th class="p-4 font-semibold">Hardware Profile</th>
+                                <th class="p-4 font-semibold text-center">Category</th>
+                                <th class="p-4 font-semibold text-center">Custodian</th>
+                                <th class="p-4 font-semibold text-center">Value & Date</th>
+                                <th class="p-4 font-semibold text-center">Status</th>
+                                <th class="p-4 font-semibold text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assetTableBody" class="text-slate-700 text-sm divide-y divide-slate-200">
+                            <!-- Populated via Javascript Core Engine -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Application Script Logic Controller -->
+    <script>
+        let categories = JSON.parse(localStorage.getItem('ams_categories')) || ["Laptop", "Desktop", "Tab", "Printer", "Scanner"];
+
+        let assets = JSON.parse(localStorage.getItem('ams_assets')) || [
+            { id: 1, name: "Apple MacBook Pro M3", type: "Laptop", user: "Jonathan Vance", date: "2026-02-14", price: "2499", status: "Assigned" },
+            { id: 2, name: "Dell OptiPlex 7010 Tower", type: "Desktop", user: "Unassigned", date: "2026-05-20", price: "899", status: "Available" },
+            { id: 3, name: "HP LaserJet Enterprise M507", type: "Printer", user: "IT Support Room", date: "2026-08-01", price: "549", status: "Maintenance" }
+        ];
+
+
+        
