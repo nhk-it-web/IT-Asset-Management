@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asset Management Suite - Guaranteed Dark Theme</title>
+    <title>IT Asset Management Suite</title>
 </head>
 <body style="font-family: system-ui, -apple-system, sans-serif; background-color: #1a1d24; color: #cbd5e1; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
 
     <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
         
-        <!-- Top Stats Counter Row (Guaranteed Layout) -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #16191f; padding: 1.5rem; rounded-width: 12px; border-radius: 0.75rem; border: 1px solid #2d323f; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+        <!-- Premium Header Title Section (New Update) -->
+        <div style="border-bottom: 1px solid #2d323f; padding-bottom: 1rem; margin-bottom: 0.5rem;">
+            <h1 style="font-size: 2.25rem; font-weight: 800; color: #ffffff; margin: 0; tracking: -0.025em;">IT Asset Management</h1>
+            <p style="font-size: 0.875rem; color: #94a3b8; margin-top: 0.25rem;">Enterprise Hardware Inventory & Allocation Ledger</p>
+        </div>
+        
+        <!-- Top Stats Counter Row -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #16191f; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #2d323f; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div>
                 <span style="display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Total Items</span>
                 <span style="display: block; font-size: 2rem; font-weight: 800; color: #ffffff; margin-top: 0.25rem;" id="statTotal">5</span>
@@ -65,7 +71,7 @@
                 <div style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Asset Type Category</label>
                     <select id="assetType" style="padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; outline: none;">
-                        <!-- Dynamic -->
+                        <!-- Dynamic Options -->
                     </select>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.35rem;">
@@ -101,7 +107,7 @@
                         </tr>
                     </thead>
                     <tbody id="assetTableBody">
-                        <!-- Content injection -->
+                        <!-- Content Injection -->
                     </tbody>
                 </table>
             </div>
@@ -111,8 +117,3 @@
 
     <!-- Software Logic Core JavaScript -->
     <script>
-        let categories = JSON.parse(localStorage.getItem('dark_categories')) || ["Laptop", "Desktop", "Tab", "Printer", "Scanner"];
-        
-        let assets = JSON.parse(localStorage.getItem('dark_assets')) || [
-            { id: 1, name: "ThinkPad X1 Carbon", type: "Laptop", user: "Rahat", location: "Dhaka HQ", status: "Assigned" },
-            { id: 2, name: "Dell OptiPlex Desktop", type: "Desktop", user: "Unassigned", location: "Dhaka HQ", status: "Available" },
