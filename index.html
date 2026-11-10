@@ -12,7 +12,6 @@
         <!-- Header -->
         <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.5rem;">
             <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
-            <p style="font-size: 0.95rem; color: #94a3b8; margin-top: 0.5rem; text-transform: uppercase;">Enterprise Hardware Inventory Ledger</p>
         </div>
         
         <!-- Stats Dashboard -->
@@ -22,45 +21,60 @@
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
-        <!-- 1. Register Asset Category (NO DROPDOWN - PURE TYPING INPUT) -->
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <label style="font-size: 1rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #ffffff;">Register New Asset Type</label>
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <!-- Guaranteed Clickable text input for any items -->
-                <input id="customCategoryInput" type="text" placeholder="Type asset category name here (e.g., Laptop, Router, UPS)..." style="flex: 1; min-width: 250px; padding: 0.85rem; background-color: #0f172a; border: 1px solid #334155; color: #ffffff; border-radius: 0.5rem; font-size: 0.9rem; outline: none; box-sizing: border-box;">
-                <button onclick="clickRegisterButton()" style="background-color: #2563eb; color: white; padding: 0.75rem 2.5rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s;">Register Asset</button>
+        <!-- 1. Register Asset Type Workspaces -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            
+            <!-- Option A: Standard Presets Selection -->
+            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;">
+                        <!-- Options injected dynamically by JS -->
+                    </select>
+                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Register Preset</button>
+                </div>
             </div>
+
+            <!-- Option B: Add New Asset Type (Updated per request) -->
+            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <input id="customCategoryInput" type="text" placeholder="Type custom name here (e.g., Server)..." style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; box-sizing: border-box;">
+                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Add</button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- 2. Configuration Grid Table Form Section (Opens dynamically below) -->
+        <!-- 2. Dynamic Configuration Table Form Section -->
         <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div id="formTitleText" style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #38bdf8;">Configure Specifications</div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div><label style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Brand Name</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell, Cisco" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none; margin-top: 0.25rem;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Model Name/No.</label><input id="assetModel" type="text" placeholder="e.g., EliteBook / OptiPlex" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none; margin-top: 0.25rem;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-992183" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none; margin-top: 0.25rem;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">User Custodian Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none; margin-top: 0.25rem;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Office Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none; margin-top: 0.25rem;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand Name</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Model Name/No.</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-9921" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">User Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
             </div>
 
-            <!-- Laptop/Desktop Custom Internal Configurations Specs (Conditional Display) -->
-            <div id="internalSpecsWrapper" style="display: none; margin-top: 1.25rem; padding: 1.25rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
-                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase; tracking: 0.05em;">PC / Laptop Internals Configuration Matrix</div>
+            <!-- Laptop/Desktop Custom Internal Configurations Specs -->
+            <div id="internalSpecsWrapper" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
+                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals Specifications</div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
-                    <input id="specCPU" type="text" placeholder="Processor CPU (e.g. Core i7)" style="padding: 0.75rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specMobo" type="text" placeholder="Motherboard Model" style="padding: 0.75rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specRAM" type="text" placeholder="RAM Size (e.g. 16GB)" style="padding: 0.75rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specSSD" type="text" placeholder="SSD Storage Capacity" style="padding: 0.75rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specHDD" type="text" placeholder="HDD Storage Capacity" style="padding: 0.75rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specPSU" type="text" placeholder="Power Supply Unit (PSU)" style="padding: 0.75rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specCPU" type="text" placeholder="Processor CPU" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specMobo" type="text" placeholder="Motherboard" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specRAM" type="text" placeholder="RAM size" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specSSD" type="text" placeholder="SSD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specHDD" type="text" placeholder="HDD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specPSU" type="text" placeholder="Power Supply Unit" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
                 </div>
             </div>
 
-            <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1.25rem;">Commit Specifications to Live Vault</button>
+            <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
         </div>
 
-        <!-- Infrastructure Data Table Logs -->
+        <!-- Infrastructure Data Matrix Logs Table -->
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
             <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto; border: 1px solid #334155; border-radius: 0.5rem;">
@@ -70,7 +84,7 @@
                             <th style="padding: 1rem;">Asset Profile</th>
                             <th style="padding: 1rem;">Category</th>
                             <th style="padding: 1rem;">Hardware Configurations</th>
-                            <th style="padding: 1rem;">Custodian Site</th>
+                            <th style="padding: 1rem;">Custodian / Site</th>
                             <th style="padding: 1rem; text-align: center;">Status</th>
                             <th style="padding: 1rem; text-align: center;">Action</th>
                         </tr>
@@ -82,17 +96,5 @@
 
     </div>
 
-    <!-- Solid JavaScript Core System Matrix -->
+    <!-- JavaScript Base Core Engine -->
     <script>
-        let assets = JSON.parse(localStorage.getItem('a_list')) || [];
-        let globalSelectedType = "";
-
-        function clickRegisterButton() {
-            const customInput = document.getElementById('customCategoryInput');
-            globalSelectedType = customInput.value.trim();
-
-            if(!globalSelectedType) {
-                alert("Please enter a valid asset category name (e.g., Laptop, Router).");
-                return;
-            }
-
