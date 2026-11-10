@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Asset Management System</title>
+    <title>IT Asset Management</title>
 </head>
 <body style="font-family: system-ui, sans-serif; background-color: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
 
@@ -14,18 +14,18 @@
             <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
         </div>
         
-        <!-- Stats -->
+        <!-- Stats Dashboard -->
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center;">
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800;" id="statTotal">0</span></div>
             <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
-        <!-- 1. Register Asset Category -->
+        <!-- 1. Register Asset Block -->
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
             <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem;">Register New Asset Type</label>
             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <select id="presetTypeDropdown" style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem;">
+                <select id="presetTypeDropdown" onchange="handleDropChange()" style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem;">
                     <option value="Laptop">Laptop</option>
                     <option value="Desktop">Desktop</option>
                     <option value="Printer">Printer</option>
@@ -34,42 +34,42 @@
                     <option value="Monitor">Monitor</option>
                     <option value="UPS">UPS</option>
                     <option value="Router">Router</option>
+                    <option value="NEW_CAT">+ Add New Asset Category...</option>
                 </select>
-                <input id="customCategoryInput" type="text" placeholder="Or type new custom category..." style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; outline: none;">
-                <button onclick="addAssetCategory()" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register</button>
+                <input id="customCategoryInput" type="text" placeholder="Type custom category name..." style="display: none; flex: 1; min-width: 200px; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; outline: none;">
+                <button onclick="clickRegisterButton()" style="background-color: #2563eb; color: white; padding: 0.75rem 2rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; height: 44px;">Register</button>
             </div>
         </div>
 
-        <!-- 2. Main Specification Form -->
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
-            <div style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem;">Asset Allocation & Configurations Form</div>
+        <!-- 2. Hidden Configuration Form (Opens only on Register Click) -->
+        <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
+            <div id="formTitleText" style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #38bdf8;">Configure Specifications</div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Selected Category</label><select id="formAssetType" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem;"></select></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box;"></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">Model</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-12345" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-9921" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box;"></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">User Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box;"></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box;"></div>
             </div>
 
-            <!-- Laptop/Desktop Specs (Always Visible to avoid script blocks) -->
-            <div style="margin-top: 1rem; padding: 1rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
-                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals (Leave blank for other items)</div>
+            <!-- Laptop/Desktop Custom Internal Specs (Conditional display) -->
+            <div id="internalSpecsWrapper" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
+                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals Configuration</div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
-                    <input id="specCPU" type="text" placeholder="Processor (e.g. i5 13th Gen)" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
+                    <input id="specCPU" type="text" placeholder="Processor CPU" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
                     <input id="specMobo" type="text" placeholder="Motherboard" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
-                    <input id="specRAM" type="text" placeholder="RAM (e.g. 16GB)" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
+                    <input id="specRAM" type="text" placeholder="RAM size" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
                     <input id="specSSD" type="text" placeholder="SSD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
                     <input id="specHDD" type="text" placeholder="HDD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
-                    <input id="specPSU" type="text" placeholder="Power Supply (PSU)" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
+                    <input id="specPSU" type="text" placeholder="Power Supply Unit" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem;">
                 </div>
             </div>
 
-            <button onclick="commitAsset()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Asset to Database</button>
+            <button onclick="commitAssetData()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Asset to Database</button>
         </div>
 
-        <!-- Data Logs Table -->
+        <!-- Infrastructure Log Logs Table -->
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
             <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto;">
@@ -91,21 +91,19 @@
 
     </div>
 
-    <!-- 100% Solid JavaScript (No complex conditions) -->
+    <!-- 100% Compressed & Bulletproof JavaScript Module -->
     <script>
         let categories = JSON.parse(localStorage.getItem('c_list')) || ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
         let assets = JSON.parse(localStorage.getItem('a_list')) || [];
+        let globalSelectedType = "Laptop";
 
-        function updateDropdowns() {
-            const formSel = document.getElementById('formAssetType');
-            formSel.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            localStorage.setItem('c_list', JSON.stringify(categories));
+        function handleDropChange() {
+            const dropdown = document.getElementById('presetTypeDropdown');
+            const customInput = document.getElementById('customCategoryInput');
+            customInput.style.display = dropdown.value === "NEW_CAT" ? "inline-block" : "none";
+            if(dropdown.value === "NEW_CAT") customInput.focus();
         }
 
-        function addAssetCategory() {
-            const dropVal = document.getElementById('presetTypeDropdown').value;
-            const inputVal = document.getElementById('customCategoryInput').value.trim();
-            let finalType = inputVal !== "" ? inputVal : dropVal;
-
-            if(finalType) {
-                if(!categories.includes(finalType)) {
+        function clickRegisterButton() {
+            const dropdown = document.getElementById('presetTypeDropdown');
+            const customInput = document.getElementById('customCategoryInput');
