@@ -17,7 +17,7 @@
         <!-- Stats Dashboard -->
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800;" id="statTotal">0</span></div>
-            <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
+            <div><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
@@ -28,7 +28,17 @@
             <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
                 <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
+                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;">
+                        <!-- Options are securely placed here hardcoded so they can NEVER disappear -->
+                        <option value="Laptop">Laptop</option>
+                        <option value="Desktop">Desktop</option>
+                        <option value="Printer">Printer</option>
+                        <option value="Scanner">Scanner</option>
+                        <option value="Tab">Tab</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="UPS">UPS</option>
+                        <option value="Router">Router</option>
+                    </select>
                     <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Preset</button>
                 </div>
             </div>
@@ -83,17 +93,3 @@
                             <th style="padding: 1rem;">Category</th>
                             <th style="padding: 1rem;">Hardware Configurations</th>
                             <th style="padding: 1rem;">Custodian / Site</th>
-                            <th style="padding: 1rem; text-align: center;">Status</th>
-                            <th style="padding: 1rem; text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="assetTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- JavaScript Base Core Engine -->
-    <script>
-        let categories = JSON.parse(localStorage.getItem('c_list')) || ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
