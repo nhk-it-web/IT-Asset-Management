@@ -15,52 +15,59 @@
         </div>
         
         <!-- Stats Dashboard -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800;" id="statTotal">0</span></div>
             <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
-        <!-- 1. Register Asset Type Block -->
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem;">Register New Asset Type</label>
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; position: relative; z-index: 10;">
-                
-                <!-- Main Core Dropdown Menu -->
-                <select id="presetTypeDropdown" onchange="handleDropdownChange()" style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;">
-                    <option value="Laptop">Laptop</option>
-                    <option value="Desktop">Desktop</option>
-                    <option value="Printer">Printer</option>
-                    <option value="Scanner">Scanner</option>
-                    <option value="Tab">Tab</option>
-                    <option value="Monitor">Monitor</option>
-                    <option value="UPS">UPS</option>
-                    <option value="Router">Router</option>
-                    <option value="NEW_CAT_OPT" style="color: #38bdf8; font-weight: bold;">+ Add New Asset Category...</option>
-                </select>
-
-                <!-- Fully Fixed & Clickable Input Box -->
-                <input id="customCategoryInput" type="text" placeholder="Enter custom type name here..." style="display: none; flex: 1; min-width: 200px; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; position: relative; z-index: 20;">
-                
-                <button onclick="clickRegisterButton()" style="background-color: #2563eb; color: white; padding: 0.75rem 2rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; height: 44px; z-index: 10;">Register</button>
+        <!-- 1. Register Asset Type Workspaces -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            
+            <!-- Option A: Standard Presets -->
+            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;">
+                        <option value="Laptop">Laptop</option>
+                        <option value="Desktop">Desktop</option>
+                        <option value="Printer">Printer</option>
+                        <option value="Scanner">Scanner</option>
+                        <option value="Tab">Tab</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="UPS">UPS</option>
+                        <option value="Router">Router</option>
+                    </select>
+                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Register Preset</button>
+                </div>
             </div>
+
+            <!-- Option B: Completely Custom Types (Guaranteed Clickable Input) -->
+            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Custom Category</label>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <input id="customCategoryInput" type="text" placeholder="Type custom type name here..." style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; box-sizing: border-box;">
+                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Register Custom</button>
+                </div>
+            </div>
+
         </div>
 
-        <!-- 2. Configuration Form (Opens dynamically below) -->
-        <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
+        <!-- 2. Dynamic Configuration Table Form Section -->
+        <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div id="formTitleText" style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #38bdf8;">Configure Specifications</div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Model</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand Name</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Model Name/No.</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-9921" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">User Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
                 <div><label style="font-size: 0.75rem; color: #94a3b8;">Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
             </div>
 
-            <!-- Laptop/Desktop Custom Internal Specs Fields -->
+            <!-- Laptop/Desktop Custom Internal Configurations Specs -->
             <div id="internalSpecsWrapper" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
-                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals Configuration</div>
+                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals Architecture Specifications</div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
                     <input id="specCPU" type="text" placeholder="Processor CPU" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
                     <input id="specMobo" type="text" placeholder="Motherboard" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
@@ -71,10 +78,10 @@
                 </div>
             </div>
 
-            <button onclick="commitAssetData()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Asset to Database</button>
+            <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
         </div>
 
-        <!-- Infrastructure Logs Table -->
+        <!-- Infrastructure Data Matrix Logs Table -->
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
             <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto; border: 1px solid #334155; border-radius: 0.5rem;">
@@ -84,22 +91,3 @@
                             <th style="padding: 1rem;">Asset Profile</th>
                             <th style="padding: 1rem;">Category</th>
                             <th style="padding: 1rem;">Hardware Configurations</th>
-                            <th style="padding: 1rem;">User & Location</th>
-                            <th style="padding: 1rem; text-align: center;">Status</th>
-                            <th style="padding: 1rem; text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="assetTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- JavaScript Base Core Engine -->
-    <script>
-        let categories = JSON.parse(localStorage.getItem('c_list')) || ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
-        let assets = JSON.parse(localStorage.getItem('a_list')) || [];
-        let globalSelectedType = "Laptop";
-
-        function handleDropdownChange() {
