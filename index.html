@@ -5,39 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Asset Management Suite</title>
 </head>
-<body style="font-family: system-ui, -apple-system, sans-serif; background-color: #1a1d24; color: #cbd5e1; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
+<body style="font-family: system-ui, sans-serif; background-color: #1a1d24; color: #cbd5e1; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
 
     <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
         
-        <!-- Colorful Headline Section -->
-        <div style="text-align: center; border-bottom: 1px solid #2d323f; padding-bottom: 1.5rem; margin-bottom: 0.5rem;">
-            <h1 style="font-size: 3rem; font-weight: 900; margin: 0; tracking: -0.03em; background: linear-gradient(to right, #3b82f6, #22d3ee, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
-            <p style="font-size: 1rem; color: #94a3b8; margin-top: 0.5rem; font-weight: 500; letter-spacing: 0.02em;">Enterprise Hardware Inventory & Allocation Ledger</p>
+        <!-- Header -->
+        <div style="text-align: center; border-bottom: 1px solid #2d323f; padding-bottom: 1.5rem;">
+            <h1 style="font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #3b82f6, #22d3ee, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
+            <p style="font-size: 1rem; color: #94a3b8; margin-top: 0.5rem;">Enterprise Hardware Inventory Ledger</p>
         </div>
         
-        <!-- Top Stats Counter Row -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #16191f; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #2d323f; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <div>
-                <span style="display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Total Items</span>
-                <span style="display: block; font-size: 2rem; font-weight: 800; color: #ffffff; margin-top: 0.25rem;" id="statTotal">0</span>
-            </div>
-            <div style="border-left: 1px solid #2d323f; border-right: 1px solid #2d323f;">
-                <span style="display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Operational</span>
-                <span style="display: block; font-size: 2rem; font-weight: 800; color: #10b981; margin-top: 0.25rem;" id="statOperational">100%</span>
-            </div>
-            <div>
-                <span style="display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">In Service</span>
-                <span style="display: block; font-size: 2rem; font-weight: 800; color: #f59e0b; margin-top: 0.25rem;" id="statInService">0</span>
-            </div>
+        <!-- Stats -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #16191f; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #2d323f; text-align: center;">
+            <div><span style="color: #94a3b8; font-size: 0.75rem; uppercase">Total Items</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #white;" id="statTotal">0</span></div>
+            <div style="border-left: 1px solid #2d323f; border-right: 1px solid #2d323f;"><span style="color: #94a3b8; font-size: 0.75rem; uppercase">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #10b981;" id="statOperational">100%</span></div>
+            <div><span style="color: #94a3b8; font-size: 0.75rem; uppercase">In Service</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #f59e0b;" id="statInService">0</span></div>
         </div>
 
-        <!-- Section: Register New Asset Type (Standalone Clean Fields) -->
-        <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <label style="font-size: 0.9rem; font-weight: 600; color: #ffffff; display: block; margin-bottom: 0.75rem;">Register new asset type</label>
-            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-                
-                <!-- Preset Dropdown Menu -->
-                <select id="presetTypeDropdown" style="flex: 1; min-width: 180px; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;">
+        <!-- Add Asset Type Block -->
+        <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem;">
+            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem;">Register new asset type</label>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <select id="presetTypeDropdown" style="flex: 1; min-width: 180px; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
                     <option value="">-- Choose Preset Type --</option>
                     <option value="Laptop">Laptop</option>
                     <option value="Desktop">Desktop</option>
@@ -47,27 +36,21 @@
                     <option value="Printer">Printer</option>
                     <option value="Scanner">Scanner</option>
                 </select>
-
-                <span style="color: #64748b; font-size: 0.875rem; font-weight: bold;">OR</span>
-
-                <!-- Manual Input Field -->
-                <input id="customCategoryInput" type="text" placeholder="Type custom name manually..." style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
-                
-                <button onclick="executeAddTypeButton()" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; height: 42px;">Add Type</button>
+                <span style="color: #64748b; font-weight: bold; align-self: center;">OR</span>
+                <input id="customCategoryInput" type="text" placeholder="Type custom name manually..." style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
+                <button onclick="executeAddTypeButton()" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; height: 42px;">Add Type</button>
             </div>
         </div>
 
         <!-- Filters Section -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label style="font-size: 0.875rem; font-weight: 600; color: #e2e8f0;">Filter by type</label>
-                <select id="filterType" onchange="renderTable()" style="padding: 0.75rem; background-color: #22262f; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; outline: none;">
-                    <option value="All">All Types</option>
-                </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label style="font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Filter by type</label>
+                <select id="filterType" onchange="renderTable()" style="width: 100%; padding: 0.75rem; background-color: #22262f; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; outline: none;"></select>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label style="font-size: 0.875rem; font-weight: 600; color: #e2e8f0;">Filter by status</label>
-                <select id="filterStatus" onchange="renderTable()" style="padding: 0.75rem; background-color: #22262f; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; outline: none;">
+            <div>
+                <label style="font-size: 0.875rem; display: block; margin-bottom: 0.25rem;">Filter by status</label>
+                <select id="filterStatus" onchange="renderTable()" style="width: 100%; padding: 0.75rem; background-color: #22262f; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; outline: none;">
                     <option value="All">All Statuses</option>
                     <option value="Available">Available</option>
                     <option value="Assigned">Assigned</option>
@@ -76,43 +59,64 @@
             </div>
         </div>
 
-        <!-- Main Form Segment -->
-        <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <div style="font-size: 1.1rem; font-weight: 700; color: #ffffff; border-bottom: 1px solid #2d323f; padding-bottom: 0.75rem; margin-bottom: 1.25rem;">Allocate & Assign New Inventory Item</div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
-                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                    <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Asset Name</label>
-                    <input id="assetName" type="text" placeholder="e.g., ThinkPad X1 Carbon" style="padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                    <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Asset Type Category</label>
-                    <select id="assetType" style="padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; outline: none;">
-                        <!-- Options Inject -->
-                    </select>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                    <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Assignee Employee</label>
-                    <input id="employee" type="text" placeholder="Employee Name" style="padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-                    <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Office Location</label>
-                    <select id="officeLocation" style="padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; outline: none;">
-                        <option>Dhaka HQ</option>
-                        <option>Chittagong Hub</option>
-                        <option>Remote Working</option>
-                    </select>
-                </div>
+        <!-- Allocate Asset Form -->
+        <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem;">
+            <div style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #2d323f; padding-bottom: 0.75rem; margin-bottom: 1.25rem;">Allocate & Assign New Inventory Item</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div><label style="font-size: 0.75rem; color: #94a3b8; uppercase">Asset Name</label><input id="assetName" type="text" placeholder="e.g., ThinkPad X1" style="width: 100%; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8; uppercase">Asset Category</label><select id="assetType" style="width: 100%; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; outline: none;"></select></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8; uppercase">Employee Name</label><input id="employee" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8; uppercase">Office Location</label><select id="officeLocation" style="width: 100%; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #fff; border-radius: 0.5rem; outline: none;"><option>Dhaka HQ</option><option>Chittagong Hub</option><option>Remote Working</option></select></div>
             </div>
-
-            <button onclick="addAsset()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer;">Commit Asset to Live Database</button>
+            <button onclick="addAsset()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-weight: 700; cursor: pointer;">Commit Asset to Live Database</button>
         </div>
 
-        <!-- Embedded Live Hardware Log View -->
-        <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <div style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem;">Active Infrastructure Logs</div>
+        <!-- Table Log -->
+        <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem;">
+            <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto; border: 1px solid #2d323f; border-radius: 0.5rem;">
                 <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
                     <thead>
-                        <tr style="background-color: #16191f;">
-                            <th style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 1rem; border-bottom: 1px solid #2d323f;">Asset Profile</th>
+                        <tr style="background-color: #16191f; color: #94a3b8;">
+                            <th style="padding: 1rem; border-bottom: 1px solid #2d323f;">Asset Profile</th>
+                            <th style="padding: 1rem; border-bottom: 1px solid #2d323f;">Category</th>
+                            <th style="padding: 1rem; border-bottom: 1px solid #2d323f;">Custodian</th>
+                            <th style="padding: 1rem; border-bottom: 1px solid #2d323f;">Location</th>
+                            <th style="padding: 1rem; border-bottom: 1px solid #2d323f;">Status</th>
+                            <th style="padding: 1rem; border-bottom: 1px solid #2d323f;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assetTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic Core Engine (Guaranteed No Cuts) -->
+    <script>
+        let categories = JSON.parse(localStorage.getItem('dark_categories')) || ["Laptop", "Desktop", "Router", "Monitor", "Tab", "Printer", "Scanner"];
+        let assets = JSON.parse(localStorage.getItem('dark_assets')) || [
+            { id: 1, name: "ThinkPad X1 Carbon", type: "Laptop", user: "Rahat", location: "Dhaka HQ", status: "Assigned" },
+            { id: 2, name: "Dell OptiPlex Desktop", type: "Desktop", user: "Unassigned", location: "Dhaka HQ", status: "Available" }
+        ];
+
+        function syncCategoryUI() {
+            localStorage.setItem('dark_categories', JSON.stringify(categories));
+            document.getElementById('assetType').innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            document.getElementById('filterType').innerHTML = `<option value="All">All Types</option>` + categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+        }
+
+        function executeAddTypeButton() {
+            const dropdown = document.getElementById('presetTypeDropdown');
+            const customInput = document.getElementById('customCategoryInput');
+            let targetType = customInput.value.trim() !== "" ? customInput.value.trim() : dropdown.value;
+
+            if (targetType !== "") {
+                if (!categories.includes(targetType)) {
+                    categories.push(targetType);
+                    syncCategoryUI();
+                }
+                document.getElementById('assetType').value = targetType;
+                customInput.value = "";
+                dropdown.value = "";
+                renderTable();
