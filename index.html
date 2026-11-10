@@ -31,12 +31,12 @@
             </div>
         </div>
 
-        <!-- Section: Register New Asset Type (Super Simple Box) -->
+        <!-- Section: Register New Asset Type (Standalone Clean Fields) -->
         <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <label style="font-size: 0.9rem; font-weight: 600; color: #ffffff; display: block; margin-bottom: 0.75rem;">Register new asset type</label>
             <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
                 
-                <!-- Preset Dropdown Option Menu -->
+                <!-- Preset Dropdown Menu -->
                 <select id="presetTypeDropdown" style="flex: 1; min-width: 180px; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;">
                     <option value="">-- Choose Preset Type --</option>
                     <option value="Laptop">Laptop</option>
@@ -50,7 +50,7 @@
 
                 <span style="color: #64748b; font-size: 0.875rem; font-weight: bold;">OR</span>
 
-                <!-- Manual Custom Text Entry -->
+                <!-- Manual Input Field -->
                 <input id="customCategoryInput" type="text" placeholder="Type custom name manually..." style="flex: 1; min-width: 200px; padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
                 
                 <button onclick="executeAddTypeButton()" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; height: 42px;">Add Type</button>
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <!-- Main Form Segment: Allocate & Assign New Inventory Item -->
+        <!-- Main Form Segment -->
         <div style="background-color: #22262f; border: 1px solid #2d323f; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div style="font-size: 1.1rem; font-weight: 700; color: #ffffff; border-bottom: 1px solid #2d323f; padding-bottom: 0.75rem; margin-bottom: 1.25rem;">Allocate & Assign New Inventory Item</div>
             
@@ -88,7 +88,7 @@
                 <div style="display: flex; flex-direction: column; gap: 0.35rem;">
                     <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Asset Type Category</label>
                     <select id="assetType" style="padding: 0.75rem; background-color: #1a1d24; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; cursor: pointer; outline: none;">
-                        <!-- Dynamic Sync -->
+                        <!-- Options Inject -->
                     </select>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 0.35rem;">
@@ -105,7 +105,7 @@
                 </div>
             </div>
 
-            <button onclick="addAsset()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s;">Commit Asset to Live Database</button>
+            <button onclick="addAsset()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer;">Commit Asset to Live Database</button>
         </div>
 
         <!-- Embedded Live Hardware Log View -->
@@ -115,3 +115,4 @@
                 <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
                     <thead>
                         <tr style="background-color: #16191f;">
+                            <th style="color: #94a3b8; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 1rem; border-bottom: 1px solid #2d323f;">Asset Profile</th>
