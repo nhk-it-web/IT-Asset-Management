@@ -9,19 +9,19 @@
 
     <div style="max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
         
-        <!-- Header -->
+        <!-- Top Title Heading -->
         <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1rem;">
             <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
         </div>
         
-        <!-- Stats Dashboard -->
+        <!-- Dashboard Score Counter widgets -->
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center;">
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 1.75rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
             <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 1.75rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 1.75rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
-        <!-- 1. Asset Type Registration Workspace -->
+        <!-- 1. Form Section: Types Registers Layout Matrix -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
             <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
                 <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.5rem; color: #38bdf8;">Select Preset Asset Type</label>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <!-- 2. Configuration Allocation Form -->
+        <!-- 2. Form Section: Allocation Details Parameters Layout Grid -->
         <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
             <div id="formTitleText" style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #38bdf8;">Configure Specifications</div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
@@ -63,7 +63,7 @@
             <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
         </div>
 
-        <!-- Master Table Logs -->
+        <!-- 3. Table Grid Section: Ledger Query Monitor Display Logs view -->
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
             <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto; border: 1px solid #334155; border-radius: 0.5rem;">
@@ -80,7 +80,7 @@
 
     </div>
 
-    <!-- Corrected Base JavaScript Engine System -->
+    <!-- JavaScript Base Core Engine Engine Controller -->
     <script>
         let categories = JSON.parse(localStorage.getItem('c_list')) || ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
         let assets = JSON.parse(localStorage.getItem('a_list_clean')) || [];
@@ -93,4 +93,3 @@
 
         function setupWorkspaceForm(targetType) {
             globalSelectedType = targetType;
-            document.getElementById('formTitleText').innerText = "Configure Specifications for: " + globalSelectedType;
