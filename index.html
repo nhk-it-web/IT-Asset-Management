@@ -14,10 +14,12 @@
     </div>
 
     <!-- Stats -->
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); background-color: #1e293b; padding: 1.25rem 0.5rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; row-gap: 1rem;">
         <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
-        <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
-        <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
+        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Running</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statRunning">0</span></div>
+        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">In Hand</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #38bdf8;" id="statInHand">0</span></div>
+        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Servicing</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statServicing">0</span></div>
+        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Defect</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #f87171;" id="statDefect">0</span></div>
     </div>
 
     <!-- Register -->
@@ -43,6 +45,7 @@
             <div><label class="lbl">Assigned To (Person)</label><input id="assetHolder" type="text" placeholder="e.g. Rahim" class="fld"></div>
             <div><label class="lbl">Department</label><input id="assetDept" type="text" list="deptList" placeholder="e.g. Accounts" class="fld"></div>
             <div><label class="lbl">Assigned Date</label><input id="assetDate" type="date" class="fld"></div>
+            <div><label class="lbl">Status</label><select id="assetStatus" class="fld" style="cursor: pointer;"></select></div>
             <datalist id="deptList"></datalist>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
@@ -62,8 +65,10 @@
 
     <!-- Filters -->
     <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1rem 1.25rem; border-radius: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
-        <input id="filterName" type="text" placeholder="Filter by Name / Person..." class="fld" style="flex: 1; min-width: 180px;">
-        <select id="filterDept" class="fld" style="flex: 1; min-width: 180px; cursor: pointer;"></select>
+        <input id="filterName" type="text" placeholder="Filter by Name / Person..." class="fld" style="flex: 1; min-width: 170px;">
+        <select id="filterType" class="fld" style="flex: 1; min-width: 150px; cursor: pointer;"></select>
+        <select id="filterDept" class="fld" style="flex: 1; min-width: 150px; cursor: pointer;"></select>
+        <select id="filterStatus" class="fld" style="flex: 1; min-width: 150px; cursor: pointer;"></select>
         <button id="expandAll" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.65rem 0.9rem; cursor: pointer; font-size: 0.8rem;">Expand all</button>
         <button id="collapseAll" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.65rem 0.9rem; cursor: pointer; font-size: 0.8rem;">Collapse all</button>
     </div>
@@ -95,6 +100,15 @@
         'Keyboard':   ['Brand', 'Model', 'Connection (USB/Wireless)']
     };
     var defaultFields = ['Brand', 'Model', 'Serial No.'];
+
+    // Status options and colours (background, text)
+    var STATUSES = ['Running', 'In Hand', 'Servicing', 'Defect'];
+    var STATUS_STYLE = {
+        'Running':   ['rgba(52,211,153,0.15)', '#34d399'],
+        'In Hand':   ['rgba(56,189,248,0.15)', '#38bdf8'],
+        'Servicing': ['rgba(251,191,36,0.15)', '#fbbf24'],
+        'Defect':    ['rgba(248,113,113,0.15)', '#f87171']
+    };
 
     var types = Object.keys(presetFields);
     var assets = [];
@@ -129,12 +143,15 @@
             var d = JSON.parse(localStorage.getItem('itAssetsV3') || localStorage.getItem('itAssetsV2'));
             if (d) { types = d.types || types; assets = d.assets || []; nextId = d.nextId || 1; }
         } catch (e) {}
-        // Older entries (without history) get a starting history record
         assets.forEach(function (a) {
             if (!a.history) {
                 a.holder = a.holder || 'Unassigned';
                 a.history = [{ holder: a.holder, dept: a.dept, from: today(), to: null, note: 'Initial assignment' }];
             }
+            // Convert old status names to the new ones
+            if (a.status === 'Operational') a.status = 'Running';
+            if (a.status === 'Maintenance') a.status = 'Servicing';
+            if (STATUSES.indexOf(a.status) === -1) a.status = 'Running';
         });
     }
 
@@ -160,6 +177,7 @@
         $('configTitle').textContent = 'Configuration - ' + type;
         $('assetDate').value = today();
         $('assetDate').max = today();
+        $('assetStatus').value = 'Running';
         renderConfig();
         $('configPanel').style.display = 'block';
     }
@@ -197,6 +215,7 @@
         if (!m) { types.push(name); m = name; save(); }
         renderDropdown(m);
         loadConfigFor(m);
+        renderTypeFilter();
         renderList();
         $('customTypeInput').value = '';
     }
@@ -214,7 +233,7 @@
         var from = $('assetDate').value || today();
         assets.push({
             id: nextId++, type: type, name: name, holder: holder, dept: dept,
-            status: 'Operational',
+            status: $('assetStatus').value || 'Running',
             config: cfgRows.filter(function (r) { return r.k.trim() && r.v.trim(); })
                            .map(function (r) { return { k: r.k.trim(), v: r.v.trim() }; }),
             history: [{ holder: holder, dept: dept, from: from, to: null, note: 'Initial assignment' }]
@@ -230,6 +249,20 @@
     });
 
     /* ---------- Filters ---------- */
+    function renderTypeFilter() {
+        var cur = $('filterType').value;
+        $('filterType').innerHTML = '<option value="">All Types</option>' +
+            types.map(function (t) { return '<option value="' + attr(t) + '">' + esc(t) + '</option>'; }).join('');
+        $('filterType').value = types.indexOf(cur) > -1 ? cur : '';
+    }
+
+    function renderStatusFilter() {
+        var cur = $('filterStatus').value;
+        $('filterStatus').innerHTML = '<option value="">All Status</option>' +
+            STATUSES.map(function (s) { return '<option value="' + attr(s) + '">' + esc(s) + '</option>'; }).join('');
+        $('filterStatus').value = STATUSES.indexOf(cur) > -1 ? cur : '';
+    }
+
     function renderDeptFilter() {
         var cur = $('filterDept').value;
         var depts = [];
@@ -243,18 +276,35 @@
 
     $('filterName').addEventListener('input', renderList);
     $('filterDept').addEventListener('change', renderList);
+    $('filterStatus').addEventListener('change', renderList);
+    $('filterType').addEventListener('change', function () {
+        if ($('filterType').value) openTypes[$('filterType').value] = true;
+        renderList();
+    });
     $('expandAll').addEventListener('click', function () { types.forEach(function (t) { openTypes[t] = true; }); renderList(); });
     $('collapseAll').addEventListener('click', function () { openTypes = {}; renderList(); });
 
     /* ---------- Type list (accordion of hidden tables) ---------- */
+    function statusSelect(a) {
+        var st = STATUS_STYLE[a.status];
+        return '<select data-sid="' + a.id + '" style="background:' + st[0] + '; color:' + st[1] + '; border:1px solid ' + st[1] + '; border-radius:999px; padding:0.3rem 0.5rem; font-size:0.78rem; font-weight:600; cursor:pointer; outline:none; color-scheme:dark;">' +
+            STATUSES.map(function (s) {
+                return '<option value="' + attr(s) + '"' + (s === a.status ? ' selected' : '') + '>' + esc(s) + '</option>';
+            }).join('') + '</select>';
+    }
+
     function renderList() {
         var q = $('filterName').value.trim().toLowerCase();
         var dept = $('filterDept').value;
+        var ft = $('filterType').value;
+        var fs = $('filterStatus').value;
         $('typeList').innerHTML = types.map(function (t, ti) {
+            if (ft && t !== ft) return '';
             var list = assets.filter(function (a) {
                 return a.type === t &&
                     (!q || a.name.toLowerCase().indexOf(q) > -1 || a.holder.toLowerCase().indexOf(q) > -1) &&
-                    (!dept || a.dept === dept);
+                    (!dept || a.dept === dept) &&
+                    (!fs || a.status === fs);
             });
             var open = !!openTypes[t];
             var head =
@@ -273,7 +323,6 @@
     }
 
     function rowHtml(a) {
-        var maint = a.status === 'Maintenance';
         var cur = curEntry(a);
         var used = daysBetween(cur.from, today());
         var cfg = a.config.length ? a.config.map(function (c) {
@@ -287,14 +336,23 @@
                 '<div style="font-size:0.75rem; color:#94a3b8;">since ' + fmt(cur.from) + ' (' + dLabel(used) + ')</div></td>' +
             '<td style="padding:0.8rem 1rem;">' + esc(a.dept) + '</td>' +
             '<td style="padding:0.8rem 1rem;">' + cfg + '</td>' +
-            '<td style="padding:0.8rem 1rem;"><span style="padding:0.25rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:600; background:' +
-                (maint ? 'rgba(251,191,36,0.15); color:#fbbf24;' : 'rgba(52,211,153,0.15); color:#34d399;') + '">' + a.status + '</span></td>' +
+            '<td style="padding:0.8rem 1rem;">' + statusSelect(a) + '</td>' +
             '<td style="padding:0.8rem 1rem; text-align:right; white-space:nowrap;">' +
                 '<button data-act="transfer" data-id="' + a.id + '" style="background:#2563eb; ' + btn + '">Transfer</button>' +
                 '<button data-act="history" data-id="' + a.id + '" style="background:#7c3aed; ' + btn + '">History (' + a.history.length + ')</button>' +
-                '<button data-act="status" data-id="' + a.id + '" style="background:#334155; ' + btn + '">' + (maint ? 'Mark Operational' : 'Maintenance') + '</button>' +
                 '<button data-act="del" data-id="' + a.id + '" style="background:#7f1d1d; ' + btn + '">Delete</button></td></tr>';
     }
+
+    // Change status from the table
+    $('typeList').addEventListener('change', function (e) {
+        var s = e.target.closest('select[data-sid]');
+        if (!s) return;
+        var a = findAsset(Number(s.dataset.sid));
+        if (!a) return;
+        a.status = s.value;
+        save();
+        renderAll();
+    });
 
     $('typeList').addEventListener('click', function (e) {
         var t = e.target.closest('button[data-toggle]');
@@ -313,11 +371,9 @@
         if (act === 'del') {
             if (!confirm('এই অ্যাসেটটা মুছে ফেলবেন? এর হিস্ট্রিও মুছে যাবে।')) return;
             assets = assets.filter(function (a) { return a.id !== id; });
-        } else {
-            assets.forEach(function (a) { if (a.id === id) a.status = a.status === 'Operational' ? 'Maintenance' : 'Operational'; });
+            save();
+            renderAll();
         }
-        save();
-        renderAll();
     });
 
     /* ---------- Modal: Transfer ---------- */
@@ -408,21 +464,27 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 
     /* ---------- Stats ---------- */
+    function countStatus(s) { return assets.filter(function (a) { return a.status === s; }).length; }
+
     function updateStats() {
-        var total = assets.length;
-        var maint = assets.filter(function (a) { return a.status === 'Maintenance'; }).length;
-        $('statTotal').textContent = total;
-        $('statOperational').textContent = (total === 0 ? 100 : Math.round(((total - maint) / total) * 100)) + '%';
-        $('statInService').textContent = maint;
+        $('statTotal').textContent = assets.length;
+        $('statRunning').textContent = countStatus('Running');
+        $('statInHand').textContent = countStatus('In Hand');
+        $('statServicing').textContent = countStatus('Servicing');
+        $('statDefect').textContent = countStatus('Defect');
     }
 
     function renderAll() {
+        renderTypeFilter();
         renderDeptFilter();
         renderList();
         updateStats();
     }
 
+    /* ---------- Start ---------- */
     load();
+    $('assetStatus').innerHTML = STATUSES.map(function (s) { return '<option value="' + attr(s) + '">' + esc(s) + '</option>'; }).join('');
+    renderStatusFilter();
     renderDropdown('');
     renderAll();
 </script>
