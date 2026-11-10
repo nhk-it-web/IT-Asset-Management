@@ -1,98 +1,175 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Asset Management System</title>
-</head>
-<body style="font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
-
-    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
-        
-        <!-- Header Title -->
-        <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.5rem;">
-            <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
-        </div>
-        
-        <!-- Stats Counter Dashboard Widgets -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
-            <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
-            <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
-        </div>
-
-        <!-- 1. Asset Type Registers Grid Workspaces Layout -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            
-            <!-- Preset Category Selection Box Block -->
-            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
-                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Preset</button>
-                </div>
-            </div>
-
-            <!-- Add Custom Type Block Input Panel -->
-            <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <input id="customCategoryInput" type="text" placeholder="Type custom name here (e.g., Server)..." style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; box-sizing: border-box;">
-                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Add</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- 2. Dynamic Configuration Table Allocation Form Panel -->
-        <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-            <div id="formTitleText" style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #38bdf8;">Configure Specifications</div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand Name</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Model Name/No.</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-9921" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">User Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
-            </div>
-
-            <!-- Laptop/Desktop Custom Internal Configurations Specs Matrices -->
-            <div id="internalSpecsWrapper" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
-                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals Specifications</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
-                    <input id="specCPU" type="text" placeholder="Processor CPU" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specMobo" type="text" placeholder="Motherboard" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specRAM" type="text" placeholder="RAM size" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specSSD" type="text" placeholder="SSD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specHDD" type="text" placeholder="HDD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                    <input id="specPSU" type="text" placeholder="Power Supply Unit" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
-                </div>
-            </div>
-
-            <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
-        </div>
-
-        <!-- 3. Infrastructure Query Log Data Monitor Tables Layout -->
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
-            <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
-            <div style="overflow-x: auto; border: 1px solid #334155; border-radius: 0.5rem;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
-                    <thead>
-                        <tr style="background-color: #0f172a; color: #94a3b8; border-bottom: 1px solid #334155;">
-                            <th style="padding: 1rem;">Asset Profile</th>
-                            <th style="padding: 1rem;">Category</th>
-                            <th style="padding: 1rem;">Hardware Configurations</th>
-                            <th style="padding: 1rem;">Custodian / Site</th>
-                            <th style="padding: 1rem; text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="assetTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Complete & 100% Repaired JavaScript Engine Script Block -->
+<!-- JavaScript Logic -->
     <script>
         let categories = ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
+        let assets = [];
+        let currentSelectedCategory = "";
+
+        // ১. পেজ লোড হলে ড্রপডাউন অপশনগুলো দেখাবে
+        window.addEventListener("DOMContentLoaded", () => {
+            populatePresetDropdown();
+            updateDashboardCounters();
+        });
+
+        // ড্রপডাউন ফিল করার ফাংশন
+        function populatePresetDropdown() {
+            const dropdown = document.getElementById("presetTypeDropdown");
+            dropdown.innerHTML = '<option value="" disabled selected>Select an asset type...</option>';
+            categories.forEach(cat => {
+                const opt = document.createElement("option");
+                opt.value = cat;
+                opt.textContent = cat;
+                dropdown.appendChild(opt);
+            });
+        }
+
+        // ২. "Register Preset" বাটনের কাজ
+        function registerPresetAsset() {
+            const dropdown = document.getElementById("presetTypeDropdown");
+            const selected = dropdown.value;
+            if (!selected) {
+                alert("Please select a preset asset type first.");
+                return;
+            }
+            openAllocationForm(selected);
+        }
+
+        // ৩. "Add" (Custom Asset) বাটনের কাজ
+        function registerCustomAsset() {
+            const input = document.getElementById("customCategoryInput");
+            const customCat = input.value.trim();
+            if (!customCat) {
+                alert("Please enter a custom asset category name.");
+                return;
+            }
+            if (!categories.some(c => c.toLowerCase() === customCat.toLowerCase())) {
+                categories.push(customCat);
+                populatePresetDropdown();
+            }
+            openAllocationForm(customCat);
+            input.value = "";
+        }
+
+        // ৪. কনফিগারেশন ফর্ম ওপেন করার ফাংশন
+        function openAllocationForm(category) {
+            currentSelectedCategory = category;
+            const formBox = document.getElementById("allocationFormBox");
+            const titleText = document.getElementById("formTitleText");
+            const internalWrapper = document.getElementById("internalSpecsWrapper");
+
+            titleText.textContent = `Configure Specifications (${category})`;
+            formBox.style.display = "block";
+
+            // Laptop বা Desktop হলে ইন্টারনাল স্পেক্স ফিল্ড দেখাবে
+            const isPC = ["laptop", "desktop"].includes(category.toLowerCase());
+            internalWrapper.style.display = isPC ? "block" : "none";
+
+            formBox.scrollIntoView({ behavior: "smooth" });
+        }
+
+        // ৫. "Commit Specifications to Live Vault" বাটনের কাজ
+        function commitAssetDataToServer() {
+            const brand = document.getElementById("assetBrand").value.trim();
+            const model = document.getElementById("assetModel").value.trim();
+            const serial = document.getElementById("assetSerial").value.trim();
+            const user = document.getElementById("assetUser").value.trim();
+            const location = document.getElementById("assetLocation").value.trim();
+
+            if (!brand || !model || !serial) {
+                alert("Please fill in at least the Brand, Model, and Serial Number.");
+                return;
+            }
+
+            let specs = [];
+            const isPC = ["laptop", "desktop"].includes(currentSelectedCategory.toLowerCase());
+            if (isPC) {
+                const cpu = document.getElementById("specCPU").value.trim();
+                const mobo = document.getElementById("specMobo").value.trim();
+                const ram = document.getElementById("specRAM").value.trim();
+                const ssd = document.getElementById("specSSD").value.trim();
+                const hdd = document.getElementById("specHDD").value.trim();
+                const psu = document.getElementById("specPSU").value.trim();
+
+                if (cpu) specs.push(`CPU: ${cpu}`);
+                if (mobo) specs.push(`Mobo: ${mobo}`);
+                if (ram) specs.push(`RAM: ${ram}`);
+                if (ssd) specs.push(`SSD: ${ssd}`);
+                if (hdd) specs.push(`HDD: ${hdd}`);
+                if (psu) specs.push(`PSU: ${psu}`);
+            }
+
+            const newAsset = {
+                id: Date.now(),
+                category: currentSelectedCategory,
+                brand,
+                model,
+                serial,
+                user: user || "Unassigned",
+                location: location || "Storage",
+                specs: specs.length > 0 ? specs.join(" | ") : "Standard Device"
+            };
+
+            assets.push(newAsset);
+            renderTable();
+            updateDashboardCounters();
+            resetForm();
+        }
+
+        // ৬. টেবিল ডাটা রেন্ডার করা
+        function renderTable() {
+            const tbody = document.getElementById("assetTableBody");
+            tbody.innerHTML = "";
+
+            if (assets.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 1.5rem; color: #64748b;">No assets logged yet.</td></tr>`;
+                return;
+            }
+
+            assets.forEach(asset => {
+                const tr = document.createElement("tr");
+                tr.style.borderBottom = "1px solid #334155";
+                tr.innerHTML = `
+                    <td style="padding: 1rem;"><strong style="color: #fff;">${escapeHtml(asset.brand)} ${escapeHtml(asset.model)}</strong><br><small style="color: #94a3b8;">S/N: ${escapeHtml(asset.serial)}</small></td>
+                    <td style="padding: 1rem;"><span style="background: #334155; color: #38bdf8; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600;">${escapeHtml(asset.category)}</span></td>
+                    <td style="padding: 1rem; color: #cbd5e1;">${escapeHtml(asset.specs)}</td>
+                    <td style="padding: 1rem;"><strong style="color: #e2e8f0;">${escapeHtml(asset.user)}</strong><br><small style="color: #94a3b8;">${escapeHtml(asset.location)}</small></td>
+                    <td style="padding: 1rem; text-align: center;">
+                        <button onclick="removeAsset(${asset.id})" style="background: #ef4444; color: white; border: none; padding: 0.4rem 0.75rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ৭. অ্যাসেট ডিলিট করা
+        function removeAsset(id) {
+            assets = assets.filter(a => a.id !== id);
+            renderTable();
+            updateDashboardCounters();
+        }
+
+        // ৮. ড্যাশবোর্ডের টোটাল কাউন্টার আপডেট করা
+        function updateDashboardCounters() {
+            document.getElementById("statTotal").textContent = assets.length;
+        }
+
+        // ফর্ম রিসেট করার ফাংশন
+        function resetForm() {
+            document.getElementById("assetBrand").value = "";
+            document.getElementById("assetModel").value = "";
+            document.getElementById("assetSerial").value = "";
+            document.getElementById("assetUser").value = "";
+            document.getElementById("assetLocation").value = "";
+            document.getElementById("specCPU").value = "";
+            document.getElementById("specMobo").value = "";
+            document.getElementById("specRAM").value = "";
+            document.getElementById("specSSD").value = "";
+            document.getElementById("specHDD").value = "";
+            document.getElementById("specPSU").value = "";
+            document.getElementById("allocationFormBox").style.display = "none";
+        }
+
+        // সিকিউরিটির জন্য HTML Escape ফাংশন
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+    </script>
