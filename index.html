@@ -3,74 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Asset Management</title>
+    <title>IT Asset Management System</title>
 </head>
-<body style="font-family: system-ui, sans-serif; background-color: #0f172a; color: #e2e8f0; margin: 0; padding: 1.5rem; box-sizing: border-box;">
+<body style="font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
 
-    <div style="max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
         
-        <!-- Top Title Heading -->
-        <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1rem;">
+        <!-- Header -->
+        <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.5rem;">
             <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
         </div>
         
-        <!-- Dashboard Score Counter widgets -->
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center;">
-            <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 1.75rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
-            <div style="border-left: 1px solid #334155; border-right: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 1.75rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
-            <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 1.75rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
+        <!-- Stats Dashboard -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); background-color: #1e293b; padding: 1.25rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+            <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800;" id="statTotal">0</span></div>
+            <div><span style="font-size: 0.75rem; color: #94a3b8;">Operational</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statOperational">100%</span></div>
+            <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
-        <!-- 1. Form Section: Types Registers Layout Matrix -->
+        <!-- 1. Register Asset Type Workspaces -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
             <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.5rem; color: #38bdf8;">Select Preset Asset Type</label>
+                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; cursor: pointer; outline: none;"></select>
-                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.65rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Preset</button>
+                    <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
+                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Preset</button>
                 </div>
             </div>
             <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.5rem; color: #c084fc;">Add New Asset Type</label>
+                <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                    <input id="customCategoryInput" type="text" placeholder="Type custom name here (e.g., Server)..." style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; outline: none; box-sizing: border-box;">
-                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.65rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Add</button>
+                    <input id="customCategoryInput" type="text" placeholder="Type custom name here (e.g., Server)..." style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; box-sizing: border-box;">
+                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Add</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. Form Section: Allocation Details Parameters Layout Grid -->
-        <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+        <!-- 2. Dynamic Configuration Table Form Section -->
+        <div id="allocationFormBox" style="display: none; background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
             <div id="formTitleText" style="font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #38bdf8;">Configure Specifications</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand Name</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; outline: none; box-sizing: border-box;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Model No.</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; outline: none; box-sizing: border-box;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-9921" style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; outline: none; box-sizing: border-box;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">User Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; outline: none; box-sizing: border-box;"></div>
-                <div><label style="font-size: 0.75rem; color: #94a3b8;">Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.65rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; outline: none; box-sizing: border-box;"></div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Brand Name</label><input id="assetBrand" type="text" placeholder="e.g., HP, Dell" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Model Name/No.</label><input id="assetModel" type="text" placeholder="e.g., EliteBook" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Serial Number</label><input id="assetSerial" type="text" placeholder="e.g., SN-9921" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">User Name</label><input id="assetUser" type="text" placeholder="Employee Name" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
+                <div><label style="font-size: 0.75rem; color: #94a3b8;">Location</label><input id="assetLocation" type="text" placeholder="e.g., Dhaka HQ" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; box-sizing: border-box; outline: none;"></div>
             </div>
             <div id="internalSpecsWrapper" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #0f172a; border-radius: 0.5rem; border: 1px solid #334155;">
-                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.5rem;">PC/LAPTOP INTERNAL SPECIFICATIONS</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem;">
-                    <input id="specCPU" type="text" placeholder="Processor CPU" style="padding: 0.5rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.3rem; font-size: 0.8rem; outline: none;">
-                    <input id="specMobo" type="text" placeholder="Motherboard" style="padding: 0.5rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.3rem; font-size: 0.8rem; outline: none;">
-                    <input id="specRAM" type="text" placeholder="RAM Size" style="padding: 0.5rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.3rem; font-size: 0.8rem; outline: none;">
-                    <input id="specSSD" type="text" placeholder="SSD Storage" style="padding: 0.5rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.3rem; font-size: 0.8rem; outline: none;">
-                    <input id="specHDD" type="text" placeholder="HDD Storage" style="padding: 0.5rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.3rem; font-size: 0.8rem; outline: none;">
-                    <input id="specPSU" type="text" placeholder="Power Supply Unit" style="padding: 0.5rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.3rem; font-size: 0.8rem; outline: none;">
+                <div style="font-size: 0.85rem; color: #c084fc; font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase;">PC/Laptop Internals Specifications</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
+                    <input id="specCPU" type="text" placeholder="Processor CPU" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specMobo" type="text" placeholder="Motherboard" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specRAM" type="text" placeholder="RAM size" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specSSD" type="text" placeholder="SSD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specHDD" type="text" placeholder="HDD Storage" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
+                    <input id="specPSU" type="text" placeholder="Power Supply Unit" style="padding: 0.65rem; background-color: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 0.4rem; font-size: 0.85rem; outline: none;">
                 </div>
             </div>
-            <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
+            <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
         </div>
 
-        <!-- 3. Table Grid Section: Ledger Query Monitor Display Logs view -->
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
+        <!-- Infrastructure Data Table Logs -->
+        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
             <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto; border: 1px solid #334155; border-radius: 0.5rem;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
                     <thead>
                         <tr style="background-color: #0f172a; color: #94a3b8; border-bottom: 1px solid #334155;">
-                            <th style="padding: 0.75rem;">Asset Profile</th><th style="padding: 0.75rem;">Category</th><th style="padding: 0.75rem;">Configurations</th><th style="padding: 0.75rem;">Custodian</th><th style="padding: 0.75rem; text-align: center;">Action</th>
+                            <th style="padding: 1rem;">Asset Profile</th><th style="padding: 1rem;">Category</th><th style="padding: 1rem;">Hardware Configurations</th><th style="padding: 1rem;">Custodian / Site</th><th style="padding: 1rem; text-align: center;">Action</th>
                         </tr>
                     </thead>
                     <tbody id="assetTableBody"></tbody>
@@ -80,7 +80,6 @@
 
     </div>
 
-    <!-- JavaScript Base Core Engine Engine Controller -->
     <script>
         let categories = JSON.parse(localStorage.getItem('c_list')) || ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
         let assets = JSON.parse(localStorage.getItem('a_list_clean')) || [];
