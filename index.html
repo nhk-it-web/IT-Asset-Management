@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <!-- Section: Register New Asset Type (Updated with Smart Dropdown) -->
+        <!-- Section: Register New Asset Type (Fixed & Fully Operational) -->
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
             <label style="font-size: 0.875rem; font-weight: 600; color: #e2e8f0;">Register new asset type</label>
             <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
@@ -45,10 +45,10 @@
                     <option value="Tab">Tab</option>
                     <option value="Printer">Printer</option>
                     <option value="Scanner">Scanner</option>
-                    <option value="__CUSTOM__" style="color: #60a5fa; font-weight: bold;">+ Add Custom Type...</option>
+                    <option value="CUSTOM_OPTION" style="color: #60a5fa; font-weight: bold;">+ Add Custom Type...</option>
                 </select>
 
-                <!-- Hidden Custom Text Input (Appears only when '+ Add Custom Type...' is selected) -->
+                <!-- Custom Text Input -->
                 <input id="customCategoryInput" type="text" placeholder="Enter new custom type name" style="display: none; flex: 1; min-width: 200px; padding: 0.75rem; background-color: #22262f; border: 1px solid #2d323f; color: #ffffff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
                 
                 <button onclick="addCustomCategory()" style="background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; height: 42px;">Add Type</button>
