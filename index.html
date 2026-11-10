@@ -21,14 +21,15 @@
             <div><span style="font-size: 0.75rem; color: #94a3b8;">Maintenance</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statInService">0</span></div>
         </div>
 
-        <!-- 1. Register Asset Type Workspace -->
+        <!-- 1. Register Asset Type Workspaces -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            <!-- Option A: Standard Presets -->
+            
+            <!-- Option A: Standard Presets Selection -->
             <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
                 <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                     <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
-                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Register Preset</button>
+                    <button onclick="registerPresetAsset()" style="background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Preset</button>
                 </div>
             </div>
 
@@ -37,9 +38,10 @@
                 <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
                 <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                     <input id="customCategoryInput" type="text" placeholder="Type custom name here (e.g., Server)..." style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; box-sizing: border-box;">
-                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;">Add</button>
+                    <button onclick="registerCustomAsset()" style="background-color: #a855f7; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Add</button>
                 </div>
             </div>
+
         </div>
 
         <!-- 2. Dynamic Configuration Table Form Section -->
@@ -70,7 +72,7 @@
             <button onclick="commitAssetDataToServer()" style="width: 100%; background-color: #059669; color: white; padding: 0.875rem; border: none; border-radius: 0.5rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 1rem;">Commit Specifications to Live Vault</button>
         </div>
 
-        <!-- Infrastructure Logs Table -->
+        <!-- Infrastructure Data Matrix Logs Table -->
         <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.75rem;">
             <div style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Active Infrastructure Logs</div>
             <div style="overflow-x: auto; border: 1px solid #334155; border-radius: 0.5rem;">
@@ -92,5 +94,6 @@
 
     </div>
 
+    <!-- JavaScript Base Core Engine -->
     <script>
         let categories = JSON.parse(localStorage.getItem('c_list')) || ["Laptop", "Desktop", "Printer", "Scanner", "Tab", "Monitor", "UPS", "Router"];
