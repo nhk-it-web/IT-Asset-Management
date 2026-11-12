@@ -1,1 +1,585 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>IT Asset Management System</title><style>*{box-sizing:border-box}body{font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:2rem 1rem}.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem}.card{background:#1e293b;border:1px solid #334155;border-radius:.75rem;padding:1.1rem}.fld{padding:.6rem;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:.5rem;font-size:.85rem;outline:none;width:100%;color-scheme:dark}.fld:focus{border-color:#38bdf8}.lbl{display:block;font-size:.75rem;color:#94a3b8;margin-bottom:.3rem}.btn{border:0;border-radius:.45rem;padding:.45rem .75rem;cursor:pointer;color:#fff;background:#334155;font-size:.8rem;margin-left:.25rem}.btn:disabled{opacity:.5;cursor:not-allowed}.b-blue{background:#2563eb}.b-vio{background:#7c3aed}.b-red{background:#7f1d1d}.b-pur{background:#9333ea}.big{width:100%;padding:.75rem;font-weight:600;font-size:.9rem;margin:0;border-radius:.5rem}.grid{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}table{width:100%;border-collapse:collapse;font-size:.85rem}th{text-align:left;color:#94a3b8;padding:.7rem .8rem;border-bottom:1px solid #334155}td{padding:.7rem .8rem;border-bottom:1px solid #334155;vertical-align:top}.sc{overflow-x:auto}.mut{color:#94a3b8;font-size:.75rem}.tbtn{width:100%;display:flex;justify-content:space-between;align-items:center;background:#1e293b;border:1px solid #334155;color:#e2e8f0;padding:.9rem 1.1rem;border-radius:.75rem;font-size:1rem;font-weight:600;cursor:pointer}.tbtn.open{border-color:#38bdf8;border-radius:.75rem .75rem 0 0}.cnt{margin-left:.5rem;font-size:.75rem;padding:.15rem .55rem;border-radius:999px;background:#0f172a;color:#38bdf8}.tbl{background:#1e293b;border:1px solid #38bdf8;border-top:0;border-radius:0 0 .75rem .75rem}.st{border:1px solid;border-radius:999px;padding:.3rem .5rem;font-size:.78rem;font-weight:600;cursor:pointer;outline:none;color-scheme:dark}#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:center;justify-content:center;padding:1rem}#mbody{background:#1e293b;border:1px solid #38bdf8;border-radius:.75rem;padding:1.25rem;width:100%;max-width:780px;max-height:88vh;overflow:auto}#msg{display:none;background:#7f1d1d;border:1px solid #f87171;border-radius:.6rem;padding:.8rem 1rem;font-size:.85rem}h1{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:800;margin:0;background:linear-gradient(to right,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}.toolbar-select{display:flex;gap:.5rem;align-items:end}.toolbar-select .fld{flex:1;min-width:0}.company-dashboard-row{display:grid;grid-template-columns:minmax(190px,.85fr) minmax(250px,1.15fr) minmax(190px,.85fr);gap:.85rem;align-items:center}.company-card{padding:.85rem;min-width:0}.company-card .btn{white-space:nowrap}.status-dashboard{width:260px;height:260px;max-width:100%;justify-self:center;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:22px;background:conic-gradient(#334155 0deg 360deg);isolation:isolate}.status-dashboard:before{content:"";position:absolute;inset:13px;border-radius:50%;background:#1e293b;z-index:-1;border:1px solid #334155}.dash-total{font-size:2.35rem;font-weight:850;line-height:1.1;color:#f8fafc}.dash-caption{font-size:.75rem;color:#94a3b8;margin:.2rem 0 .65rem}.dash-legend{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;width:100%;max-width:185px}.dash-item{font-size:.7rem;display:flex;justify-content:space-between;gap:.35rem;white-space:nowrap}.dash-item b{font-size:.78rem}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Asset Management System</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:2rem 1rem}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem}
+.card{background:#1e293b;border:1px solid #334155;border-radius:.75rem;padding:1.1rem}
+.fld{padding:.6rem;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:.5rem;font-size:.85rem;outline:none;width:100%;color-scheme:dark}
+.fld:focus{border-color:#38bdf8}
+.lbl{display:block;font-size:.75rem;color:#94a3b8;margin-bottom:.3rem}
+.btn{border:0;border-radius:.45rem;padding:.45rem .75rem;cursor:pointer;color:#fff;background:#334155;font-size:.8rem;margin-left:.25rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.b-blue{background:#2563eb}.b-vio{background:#7c3aed}.b-red{background:#7f1d1d}.b-pur{background:#9333ea}
+.big{width:100%;padding:.75rem;font-weight:600;font-size:.9rem;margin:0;border-radius:.5rem}
+.grid{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;color:#94a3b8;padding:.7rem .8rem;border-bottom:1px solid #334155}
+td{padding:.7rem .8rem;border-bottom:1px solid #334155;vertical-align:top}
+.sc{overflow-x:auto}
+.mut{color:#94a3b8;font-size:.75rem}
+.tbtn{width:100%;display:flex;justify-content:space-between;align-items:center;background:#1e293b;border:1px solid #334155;color:#e2e8f0;padding:.9rem 1.1rem;border-radius:.75rem;font-size:1rem;font-weight:600;cursor:pointer}
+.tbtn.open{border-color:#38bdf8;border-radius:.75rem .75rem 0 0}
+.cnt{margin-left:.5rem;font-size:.75rem;padding:.15rem .55rem;border-radius:999px;background:#0f172a;color:#38bdf8}
+.tbl{background:#1e293b;border:1px solid #38bdf8;border-top:0;border-radius:0 0 .75rem .75rem}
+.st{border:1px solid;border-radius:999px;padding:.3rem .5rem;font-size:.78rem;font-weight:600;cursor:pointer;outline:none;color-scheme:dark}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:center;justify-content:center;padding:1rem}
+#mbody{background:#1e293b;border:1px solid #38bdf8;border-radius:.75rem;padding:1.25rem;width:100%;max-width:780px;max-height:88vh;overflow:auto}
+#msg{display:none;background:#7f1d1d;border:1px solid #f87171;border-radius:.6rem;padding:.8rem 1rem;font-size:.85rem}
+h1{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:800;margin:0;background:linear-gradient(to right,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
+.toolbar-select{display:flex;gap:.5rem;align-items:end}
+.toolbar-select .fld{flex:1;min-width:0}
+.company-dashboard-row{display:grid;grid-template-columns:minmax(190px,.85fr) minmax(250px,1.15fr) minmax(190px,.85fr);gap:.85rem;align-items:center}
+.company-card{padding:.85rem;min-width:0}
+.company-card .btn{white-space:nowrap}
+.status-dashboard{width:260px;height:260px;max-width:100%;justify-self:center;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:22px;background:conic-gradient(#334155 0deg 360deg);isolation:isolate}
+.status-dashboard:before{content:"";position:absolute;inset:13px;border-radius:50%;background:#1e293b;z-index:-1;border:1px solid #334155}
+.dash-total{font-size:2.35rem;font-weight:850;line-height:1.1;color:#f8fafc}
+.dash-caption{font-size:.75rem;color:#94a3b8;margin:.2rem 0 .65rem}
+.dash-legend{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;width:100%;max-width:185px}
+.dash-item{font-size:.7rem;display:flex;justify-content:space-between;gap:.35rem;white-space:nowrap}
+.dash-item b{font-size:.78rem}
+@media(max-width:700px){.company-dashboard-row{grid-template-columns:1fr 1fr}.status-dashboard{grid-column:1/-1;grid-row:1;width:230px;height:230px}.company-card{padding:.75rem}}
+@media(max-width:420px){.company-dashboard-row{grid-template-columns:1fr}.status-dashboard{grid-column:1;grid-row:1}.company-card{grid-column:1}}
+@media(max-width:520px){body{padding:1rem .65rem}.toolbar-select{align-items:stretch}.toolbar-select .btn{margin:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div style="text-align:center;border-bottom:1px solid #1e293b;padding-bottom:1.25rem"><h1>IT Asset Management</h1></div>
+  <div id="msg"></div>
+  <div class="company-dashboard-row">
+    <div class="card company-card">
+      <label class="lbl" style="font-size:.9rem;font-weight:600;color:#34d399">Select Company</label>
+      <div class="toolbar-select">
+        <select id="company" class="fld" style="cursor:pointer"></select>
+        <button id="delCompany" class="btn b-red" type="button">Delete</button>
+      </div>
+    </div>
+    <div id="stats" class="status-dashboard" aria-label="Asset status dashboard"></div>
+    <div class="card company-card">
+      <label class="lbl" style="font-size:.9rem;font-weight:600;color:#fbbf24">Add New Company</label>
+      <div style="display:flex;gap:.45rem"><input id="newCompany" class="fld" placeholder="e.g. Sunrise"><button id="addCompany" class="btn b-pur" style="padding:.6rem .8rem">Add</button></div>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+    <div class="card">
+      <label class="lbl" style="font-size:.9rem;font-weight:600;color:#38bdf8">Select Preset Asset Type</label>
+      <div class="toolbar-select">
+        <select id="preset" class="fld" style="cursor:pointer"></select>
+        <button id="delType" class="btn b-red" type="button">Delete</button>
+      </div>
+    </div>
+    <div class="card">
+      <label class="lbl" style="font-size:.9rem;font-weight:600;color:#c084fc">Add New Asset Type</label>
+      <div style="display:flex;gap:.6rem"><input id="newType" class="fld" placeholder="e.g. Projector"><button id="addType" class="btn b-pur" style="padding:.6rem 1rem">Add</button></div>
+    </div>
+  </div>
+
+  <div id="cfgPanel" class="card" style="display:none;border-color:#38bdf8">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"><h2 id="cfgTitle" style="margin:0;font-size:1.1rem;color:#38bdf8">Configuration</h2><span id="nextId" class="cnt" style="margin:0;font-size:.85rem;padding:.3rem .8rem"></span></div>
+    <div class="grid" style="margin-bottom:1rem">
+      <div><label class="lbl">Asset Name</label><input id="aName" class="fld" placeholder="e.g. Dell Latitude 01"></div>
+      <div><label class="lbl">Assigned To (Person)</label><input id="aHolder" class="fld" placeholder="e.g. Rahim"></div>
+      <div><label class="lbl">Department</label><input id="aDept" class="fld" list="deptList" placeholder="e.g. Accounts"></div>
+      <div><label class="lbl">Assigned Date</label><input id="aDate" type="date" class="fld"></div>
+      <div><label class="lbl">Status</label><select id="aStatus" class="fld" style="cursor:pointer"></select></div>
+      <datalist id="deptList"></datalist>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem"><span class="mut">Details</span><button id="addField" class="btn">+ Add Field</button></div>
+    <div class="sc"><table><thead><tr><th style="width:28%">Field</th><th>Value</th><th style="width:28%">Serial No.</th><th style="width:40px"></th></tr></thead><tbody id="cfgBody"></tbody></table></div>
+    <button id="regBtn" class="btn b-blue big" style="margin-top:1rem">Register Asset</button>
+  </div>
+
+  <div class="card" style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+    <input id="fName" class="fld" placeholder="Filter by Name / Person..." style="flex:1;min-width:160px">
+    <select id="fCompany" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+    <select id="fType" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+    <select id="fDept" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+    <select id="fStatus" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+    <button id="expAll" class="btn">Expand all</button><button id="colAll" class="btn">Collapse all</button>
+  </div>
+
+  <div id="typeList" style="display:flex;flex-direction:column;gap:.7rem"></div>
+
+  <div class="card" style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+    <span class="mut" style="flex:1;min-width:200px">Backup: Download বা Excel / CSV Upload করুন</span>
+    <button id="csvBtn" class="btn b-blue">Download Excel (CSV)</button>
+    <button id="jsonBtn" class="btn">Download JSON</button>
+    <label class="btn b-pur" style="cursor:pointer;padding:.6rem 1rem">
+      Upload Excel / CSV
+      <input type="file" id="uploadFile" accept=".csv,.xlsx,.xls" style="display:none">
+    </label>
+  </div>
+</div>
+
+<div id="modal"><div id="mbody"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+/* Supabase Project URL এবং publishable/anon key */
+const SUPABASE_URL = 'https://ppefbgotnaeozooxpluc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_83W8r7bQykLMM3NyocV-Jg_gy08NEcw';
+
+const PRESET = {
+  'Laptop':['Brand','Model','CPU','RAM','Storage','Serial No.'],
+  'Desktop PC':['Brand','Model','CPU','RAM','Storage','Serial No.'],
+  'Monitor':['Brand','Model','Size','Resolution','Serial No.'],
+  'Printer':['Brand','Model','Type (Laser/Inkjet)','IP Address','Serial No.'],
+  'Router':['Brand','Model','IP Address','MAC Address','Firmware','Location'],
+  'Server':['Brand','Model','CPU','RAM','Storage','OS','IP Address','Location'],
+  'Smartphone':['Brand','Model','OS','Storage','IMEI'],
+  'Keyboard':['Brand','Model','Connection (USB/Wireless)']
+};
+const DEFAULT_FIELDS = ['Brand','Model','Serial No.'];
+const STATUSES = ['Running','In Hand','Servicing','Defect'];
+const SC = {'Running':'#34d399','In Hand':'#38bdf8','Servicing':'#fbbf24','Defect':'#f87171'};
+const PRESET_COMPANIES = ['Arabi','Novel','Bengal','AST','Rosevally'];
+
+let companies=[], types=Object.keys(PRESET), assets=[], open={}, cfg=[], modal=null, sb=null, timer=null;
+const $ = id => document.getElementById(id);
+const esc = s => { const d=document.createElement('div'); d.textContent=String(s ?? ''); return d.innerHTML; };
+const attr = s => esc(s).replace(/"/g,'&quot;');
+const pad = n => String(n).padStart(2,'0');
+const today = () => { const d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); };
+const utc = s => { const p=String(s||today()).split('-'); return Date.UTC(+p[0],+p[1]-1,+p[2]); };
+const daysBetween = (a,b) => Math.max(0,Math.round((utc(b)-utc(a))/86400000));
+const fmt = s => { if(!s) return '-'; const p=String(s).split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : s; };
+const dayL = n => n+(n===1?' day':' days');
+const cur = a => a.history[a.history.length-1];
+const find = id => assets.find(a=>Number(a.id)===Number(id));
+function msg(t){ $('msg').style.display=t?'block':'none'; $('msg').textContent=t||''; }
+function need(){ if(!sb){alert('Supabase configuration পাওয়া যায়নি।');return false;} return true; }
+
+function makePrefix(name){
+  const L=String(name).replace(/[^A-Za-z0-9]/g,'').toUpperCase()||'CMP';
+  const used=companies.map(c=>c.prefix);
+  for(let n=Math.min(3,L.length);n<=L.length;n++){if(!used.includes(L.slice(0,n)))return L.slice(0,n);}
+  let i=2;while(used.includes(L+i))i++;return L+i;
+}
+function prefixOf(c){const x=companies.find(k=>k.name===c);return x?x.prefix:'AST';}
+function nextCode(company){
+  const p=prefixOf(company);let max=0;
+  assets.forEach(a=>{if(a.code&&a.code.startsWith(p+'-')){const n=parseInt(a.code.slice(p.length+1),10);if(n>max)max=n;}});
+  return p+'-'+String(max+1).padStart(3,'0');
+}
+
+async function loadAll(){
+  if(!sb)return;
+  const [a,t,c]=await Promise.all([
+    sb.from('assets').select('*').order('id'),
+    sb.from('asset_types').select('name'),
+    sb.from('companies').select('name,prefix')
+  ]);
+  if(a.error){msg('ডেটা লোড করা যায়নি: '+a.error.message);return;}
+  assets=(a.data||[]).map(x=>({
+    ...x,company:x.company||'AST',code:x.code||('AST-'+String(x.id).padStart(3,'0')),
+    config:Array.isArray(x.config)?x.config:[],
+    history:Array.isArray(x.history)&&x.history.length?x.history:[{holder:x.holder||'Unassigned',dept:x.dept||'Unassigned',from:today(),to:null,note:'Initial assignment'}]
+  }));
+  (t.data||[]).forEach(r=>{if(!types.includes(r.name))types.push(r.name);});
+  (c.data||[]).forEach(r=>{if(!companies.some(x=>x.name.toLowerCase()===r.name.toLowerCase()))companies.push({name:r.name,prefix:r.prefix||makePrefix(r.name)});});
+  assets.forEach(x=>{
+    if(!companies.some(k=>k.name===x.company))companies.push({name:x.company,prefix:makePrefix(x.company)});
+    if(!types.includes(x.type))types.push(x.type);
+  });
+  msg('');renderAll();
+}
+const schedule=()=>{clearTimeout(timer);timer=setTimeout(loadAll,350);};
+
+function fillPreset(sel){
+  $('preset').innerHTML='<option value="">-- Select asset type --</option>'+types.map(t=>`<option value="${attr(t)}">${esc(t)}</option>`).join('');
+  $('preset').value=sel||'';
+}
+function refreshHead(){
+  const t=$('preset').value,c=$('company').value;
+  if(t)$('cfgTitle').textContent='Configuration - '+t+' ('+c+')';
+  $('nextId').textContent=c?'Next ID: '+nextCode(c):'';
+}
+function fillCompany(sel){
+  const v=sel!==undefined?sel:$('company').value;
+  $('company').innerHTML='<option value="">-- Select company --</option>'+companies.map(c=>`<option value="${attr(c.name)}">${esc(c.name)} (${esc(c.prefix)})</option>`).join('');
+  $('company').value=companies.some(c=>c.name===v)?v:'';
+}
+function loadCfg(type){
+  if(!type){$('cfgPanel').style.display='none';cfg=[];return;}
+  if(!$('company').value){alert('প্রথমে Company বাছুন।');fillPreset('');return;}
+  cfg=(PRESET[type]||DEFAULT_FIELDS).map(k=>({k,v:'',s:''}));
+  refreshHead();$('aDate').value=today();$('aDate').max=today();$('aStatus').value='Running';
+  // Automatically use the selected Asset Type as the initial Asset Name.
+  // The user can still edit it to enter a more specific name/model identifier.
+  $('aName').value=type;
+  $('aHolder').value='';$('aDept').value='';
+  drawCfg();$('cfgPanel').style.display='block';
+}
+function drawCfg(){
+  $('cfgBody').innerHTML=cfg.map((r,i)=>`<tr>
+    <td><input class="fld" data-i="${i}" data-p="k" value="${attr(r.k)}"></td>
+    <td><input class="fld" data-i="${i}" data-p="v" value="${attr(r.v)}" placeholder="Write value..."></td>
+    <td><input class="fld" data-i="${i}" data-p="s" value="${attr(r.s||'')}" placeholder="Serial No."></td>
+    <td style="text-align:center"><button data-rm="${i}" style="background:none;border:0;color:#f87171;font-size:1.1rem;cursor:pointer">&times;</button></td>
+  </tr>`).join('');
+}
+$('cfgBody').addEventListener('input',e=>{if(e.target.dataset.i!==undefined)cfg[Number(e.target.dataset.i)][e.target.dataset.p]=e.target.value;});
+$('cfgBody').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(b){cfg.splice(Number(b.dataset.rm),1);drawCfg();}});
+$('addField').onclick=()=>{cfg.push({k:'',v:'',s:''});drawCfg();const l=$('cfgBody').querySelectorAll('[data-p="k"]');l[l.length-1]?.focus();};
+$('preset').onchange=()=>$('preset').value?loadCfg($('preset').value):loadCfg('');
+$('company').onchange=()=>{if(!$('company').value){fillPreset('');loadCfg('');}refreshHead();};
+
+async function addType(){
+  const name=$('newType').value.trim();if(!name)return;
+  let m=types.find(t=>t.toLowerCase()===name.toLowerCase());
+  if(!m){
+    if(!need())return;
+    const {error}=await sb.from('asset_types').upsert({name},{onConflict:'name'});
+    if(error)return alert('সেভ হয়নি: '+error.message);
+    types.push(name);m=name;
+  }
+  fillPreset(m);loadCfg(m);fillFilters();renderList();$('newType').value='';
+}
+$('addType').onclick=addType;
+$('newType').onkeydown=e=>{if(e.key==='Enter')addType();};
+
+async function addCompany(){
+  const name=$('newCompany').value.trim();if(!name)return;
+  let m=companies.find(c=>c.name.toLowerCase()===name.toLowerCase());
+  if(!m){
+    if(!need())return;
+    m={name,prefix:makePrefix(name)};
+    const {error}=await sb.from('companies').upsert(m,{onConflict:'name'});
+    if(error)return alert('সেভ হয়নি: '+error.message);
+    companies.push(m);
+  }
+  fillCompany(m.name);fillFilters();refreshHead();$('newCompany').value='';
+}
+$('addCompany').onclick=addCompany;
+$('newCompany').onkeydown=e=>{if(e.key==='Enter')addCompany();};
+
+$('delCompany').onclick=async()=>{
+  const company=$('company').value;
+  if(!company)return alert('প্রথমে Company Select করুন।');
+  if(assets.some(a=>a.company===company))return alert('এই Company-তে Asset রয়েছে। আগে Asset অন্য Company-তে Transfer/সরান অথবা Asset Delete করুন।');
+  if(!confirm(`আপনি কি "${company}" Company Delete করতে চান?`))return;
+  if(!need())return;
+  const {error}=await sb.from('companies').delete().eq('name',company);
+  if(error)return alert('Delete হয়নি: '+error.message);
+  companies=companies.filter(c=>c.name!==company);
+  fillCompany('');fillFilters();refreshHead();alert('Company সফলভাবে Delete হয়েছে।');
+};
+$('delType').onclick=async()=>{
+  const type=$('preset').value;
+  if(!type)return alert('প্রথমে Asset Type Select করুন।');
+  if(assets.some(a=>a.type===type))return alert('এই Asset Type-এ Asset রয়েছে। আগে Asset অন্য Type-এ পরিবর্তন/সরান অথবা Asset Delete করুন।');
+  if(!confirm(`আপনি কি "${type}" Asset Type Delete করতে চান?`))return;
+  if(!need())return;
+  const {error}=await sb.from('asset_types').delete().eq('name',type);
+  if(error)return alert('Delete হয়নি: '+error.message);
+  types=types.filter(t=>t!==type);fillPreset('');loadCfg('');fillFilters();renderList();alert('Asset Type সফলভাবে Delete হয়েছে।');
+};
+
+$('regBtn').onclick=async()=>{
+  const type=$('preset').value,name=$('aName').value.trim();
+  if(!type)return;
+  if(!name){alert('অ্যাসেটের Name লিখুন।');$('aName').focus();return;}
+  if(!need())return;
+  const company=$('company').value;if(!company)return alert('প্রথমে Company বাছুন।');
+  const holder=$('aHolder').value.trim()||'Unassigned';
+  const dept=$('aDept').value.trim()||'Unassigned';
+  const from=$('aDate').value||today();
+  if(from>today())return alert('ভবিষ্যতের Assigned Date দেওয়া যাবে না।');
+  const row={
+    company,type,name,holder,dept,status:$('aStatus').value||'Running',
+    config:cfg.filter(r=>r.k.trim()&&(r.v.trim()||(r.s||'').trim())).map(r=>({k:r.k.trim(),v:r.v.trim(),s:(r.s||'').trim()})),
+    history:[{holder,dept,from,to:null,note:'Initial assignment'}]
+  };
+  let error;
+  for(let i=0;i<4;i++){
+    ({error}=await sb.from('assets').insert({...row,code:nextCode(company)}));
+    if(!error||error.code!=='23505')break;
+    await loadAll();
+  }
+  if(error)return alert('সেভ হয়নি: '+error.message);
+  open[type]=true;fillPreset('');loadCfg('');await loadAll();
+};
+
+function fillSel(id,label,items){
+  const v=$(id).value;
+  $(id).innerHTML=`<option value="">${label}</option>`+items.map(x=>`<option value="${attr(x)}">${esc(x)}</option>`).join('');
+  $(id).value=items.includes(v)?v:'';
+}
+function fillFilters(){
+  const depts=[...new Set(assets.map(a=>a.dept).filter(Boolean))].sort();
+  fillSel('fCompany','All Companies',companies.map(c=>c.name));
+  fillSel('fType','All Types',types);
+  fillSel('fDept','All Departments',depts);
+  fillSel('fStatus','All Status',STATUSES);
+  $('deptList').innerHTML=depts.map(d=>`<option value="${attr(d)}">`).join('');
+}
+$('fName').oninput=renderList;
+['fCompany','fDept','fStatus'].forEach(i=>$(i).onchange=renderList);
+$('fType').onchange=()=>{if($('fType').value)open[$('fType').value]=true;renderList();};
+$('expAll').onclick=()=>{types.forEach(t=>open[t]=true);renderList();};
+$('colAll').onclick=()=>{open={};renderList();};
+
+function renderList(){
+  const q=$('fName').value.trim().toLowerCase(),d=$('fDept').value,ft=$('fType').value,fs=$('fStatus').value,fc=$('fCompany').value;
+  $('typeList').innerHTML=types.map((t,ti)=>{
+    if(ft&&t!==ft)return '';
+    const list=assets.filter(a=>a.type===t&&(!q||String(a.name).toLowerCase().includes(q)||String(a.holder).toLowerCase().includes(q))&&(!d||a.dept===d)&&(!fs||a.status===fs)&&(!fc||a.company===fc));
+    const o=!!open[t];
+    const head=`<button class="tbtn${o?' open':''}" data-t="${ti}"><span>${esc(t)}<span class="cnt">${list.length}</span></span><span class="mut">${o?'▾':'▸'}</span></button>`;
+    if(!o)return `<div>${head}</div>`;
+    const rows=list.length?list.map(row).join(''):'<tr><td colspan="7" class="mut" style="text-align:center;padding:1.2rem">No assets found.</td></tr>';
+    return `<div>${head}<div class="tbl sc"><table><thead><tr><th>ID</th><th>Name</th><th>Assigned To</th><th>Department</th><th>Configuration</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  }).join('');
+}
+function row(a){
+  const c=cur(a)||{from:today()},col=SC[a.status]||'#94a3b8';
+  const cf=a.config.length?a.config.map(x=>`<div style="font-size:.78rem;line-height:1.5"><span class="mut">${esc(x.k)}:</span> ${esc(x.v||'-')}${x.s?' <span class="mut">(S/N: '+esc(x.s)+')</span>':''}</div>`).join(''):'<span class="mut">-</span>';
+  return `<tr>
+    <td class="mut">${esc(a.code)}</td>
+    <td><b>${esc(a.name)}</b><div class="mut">${esc(a.company)}</div></td>
+    <td><b>${esc(a.holder)}</b><div class="mut">since ${fmt(c.from)} (${dayL(daysBetween(c.from,today()))})</div></td>
+    <td>${esc(a.dept)}</td><td>${cf}</td>
+    <td><select class="st" data-s="${a.id}" style="background:${col}22;color:${col};border-color:${col}">${STATUSES.map(s=>`<option value="${attr(s)}"${s===a.status?' selected':''}>${esc(s)}</option>`).join('')}</select></td>
+    <td style="text-align:right;white-space:nowrap">
+      <button class="btn b-blue" data-a="tr" data-id="${a.id}">Transfer</button>
+      <button class="btn b-vio" data-a="hi" data-id="${a.id}">History (${a.history.length})</button>
+      <button class="btn b-red" data-a="del" data-id="${a.id}">Delete</button>
+    </td></tr>`;
+}
+$('typeList').addEventListener('change',async e=>{
+  const s=e.target.closest('[data-s]');if(!s||!need())return;
+  const {error}=await sb.from('assets').update({status:s.value}).eq('id',Number(s.dataset.s));
+  if(error)alert('সেভ হয়নি: '+error.message);loadAll();
+});
+$('typeList').addEventListener('click',async e=>{
+  const t=e.target.closest('[data-t]');
+  if(t){const n=types[Number(t.dataset.t)];open[n]=!open[n];return renderList();}
+  const b=e.target.closest('[data-a]');if(!b)return;
+  const id=Number(b.dataset.id);
+  if(b.dataset.a==='tr')return openTransfer(id);
+  if(b.dataset.a==='hi')return openHistory(id);
+  if(!confirm('এই অ্যাসেটটা মুছে ফেলবেন? এর হিস্ট্রিও মুছে যাবে।')||!need())return;
+  const {error}=await sb.from('assets').delete().eq('id',id);
+  if(error)alert('মোছা যায়নি: '+error.message);loadAll();
+});
+
+const showModal=h=>{$('mbody').innerHTML=h;$('modal').style.display='flex';};
+const closeModal=()=>{$('modal').style.display='none';modal=null;};
+function openTransfer(id){
+  const a=find(id);if(!a)return;const c=cur(a),t=today();modal=id;
+  showModal(`<h3 style="margin:0 0 .4rem;color:#38bdf8">Transfer - ${esc(a.name)}</h3>
+    <p class="mut" style="margin:0 0 1rem;font-size:.85rem">Currently with <b style="color:#e2e8f0">${esc(a.holder)}</b> (${esc(a.dept)}) since ${fmt(c.from)} - ${dayL(daysBetween(c.from,t))}</p>
+    <div class="grid">
+      <div><label class="lbl">Transfer To (Person)</label><input id="tHolder" class="fld" placeholder="e.g. Karim"></div>
+      <div><label class="lbl">Department</label><input id="tDept" class="fld" list="deptList" value="${attr(a.dept)}"></div>
+      <div><label class="lbl">Transfer Date</label><input id="tDate" type="date" class="fld" min="${attr(c.from)}" max="${t}" value="${t<c.from?c.from:t}"></div>
+      <div><label class="lbl">Note (optional)</label><input id="tNote" class="fld" placeholder="e.g. Role change"></div>
+    </div>
+    <div style="display:flex;gap:.6rem;margin-top:1.1rem"><button id="tOk" class="btn b-blue big" style="flex:1">Confirm Transfer</button><button data-close="1" class="btn big" style="width:auto;padding:.75rem 1.2rem">Cancel</button></div>`);
+  $('tHolder').focus();
+}
+async function doTransfer(){
+  const a=find(modal);if(!a||!need())return;
+  const c=cur(a),holder=$('tHolder').value.trim(),dept=$('tDept').value.trim()||'Unassigned',date=$('tDate').value,note=$('tNote').value.trim();
+  if(!holder)return alert('কার কাছে ট্রান্সফার করবেন তার নাম লিখুন।');
+  if(!date)return alert('ট্রান্সফারের তারিখ দিন।');
+  if(date<c.from)return alert('ট্রান্সফারের তারিখ আগের Assigned Date-এর আগে হতে পারবে না।');
+  if(date>today())return alert('ভবিষ্যতের তারিখ দেওয়া যাবে না।');
+  if(holder.toLowerCase()===a.holder.toLowerCase()&&dept.toLowerCase()===a.dept.toLowerCase())return alert('এই Asset আগে থেকেই এই ব্যক্তির কাছে আছে।');
+  const history=a.history.map((h,i)=>i===a.history.length-1?{...h,to:date}:h).concat({holder,dept,from:date,to:null,note});
+  const {error}=await sb.from('assets').update({holder,dept,history}).eq('id',a.id);
+  if(error)return alert('সেভ হয়নি: '+error.message);
+  open[a.type]=true;closeModal();loadAll();
+}
+function openHistory(id){
+  const a=find(id);if(!a)return;const t=today();let total=0;
+  const rows=a.history.map((h,i)=>{
+    const days=daysBetween(h.from,h.to||t);total+=days;
+    return `<tr${h.to?'':' style="background:rgba(52,211,153,.07)"'}><td class="mut">${i+1}</td><td><b>${esc(h.holder)}</b></td><td>${esc(h.dept)}</td><td>${fmt(h.from)}</td><td>${h.to?fmt(h.to):'<b style="color:#34d399">Present</b>'}</td><td><b>${dayL(days)}</b>${h.to?'':' <span class="mut">(so far)</span>'}</td><td class="mut">${h.note?esc(h.note):'-'}</td></tr>`;
+  }).join('');
+  showModal(`<h3 style="margin:0 0 .3rem;color:#38bdf8">History - ${esc(a.name)} (${esc(a.code)})</h3>
+    <p class="mut" style="margin:0 0 1rem;font-size:.85rem">Total in use: <b style="color:#e2e8f0">${dayL(total)}</b> · ${a.history.length} record(s)</p>
+    <div class="sc"><table><thead><tr><th>#</th><th>Person</th><th>Department</th><th>From</th><th>To</th><th>Days Used</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <button data-close="1" class="btn big" style="margin-top:1.1rem">Close</button>`);
+}
+$('modal').addEventListener('click',e=>{
+  if(e.target===$('modal')||e.target.closest('[data-close]'))return closeModal();
+  if(e.target.id==='tOk')doTransfer();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function stats(){
+  const counts=STATUSES.map(s=>({name:s,count:assets.filter(a=>a.status===s).length,color:SC[s]}));
+  const total=assets.length;
+  let cursor=0;
+  const slices=counts.map(x=>{
+    const start=cursor;
+    cursor+=total?(x.count/total)*360:0;
+    return `${x.color} ${start}deg ${cursor}deg`;
+  });
+  const ring=total?`conic-gradient(${slices.join(',')})`:'conic-gradient(#334155 0deg 360deg)';
+  $('stats').innerHTML=`<div class="dash-total">${total}</div>
+    <div class="dash-caption">TOTAL ASSETS</div>
+    <div class="dash-legend">${counts.map(x=>`<div class="dash-item"><span style="color:${x.color}">● ${esc(x.name)}</span><b>${x.count}</b></div>`).join('')}</div>`;
+  $('stats').style.background=ring;
+}
+function saveFile(name,mime,text){
+  const a=document.createElement('a');const url=URL.createObjectURL(new Blob([text],{type:mime}));
+  a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+function csvCell(v){
+  let s=String(v??'');
+  // Protect spreadsheet formula injection in text cells.
+  if(/^[=+\-@]/.test(s))s="'"+s;
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+$('csvBtn').onclick=()=>{
+  const headers=['ID','Company','Type','Name','Assigned To','Department','Status','Since','Days','Configuration','History','Config JSON','History JSON'];
+  const rows=assets.map(a=>{
+    const c=cur(a)||{from:today()};
+    return [a.code,a.company,a.type,a.name,a.holder,a.dept,a.status,fmt(c.from),daysBetween(c.from,today()),
+      a.config.map(x=>x.k+': '+(x.v||'-')+(x.s?' [S/N: '+x.s+']':'')).join('; '),
+      a.history.map(h=>h.holder+' ('+fmt(h.from)+' - '+(h.to?fmt(h.to):'Present')+')').join(' | '),
+      JSON.stringify(a.config),JSON.stringify(a.history)];
+  });
+  const csv='\ufeff'+[headers,...rows].map(r=>r.map(csvCell).join(',')).join('\r\n');
+  saveFile('assets-'+today()+'.csv','text/csv;charset=utf-8',csv);
+};
+$('jsonBtn').onclick=()=>saveFile('assets-backup-'+today()+'.json','application/json;charset=utf-8',JSON.stringify({types,companies,assets},null,2));
+
+function parseImportDate(value){
+  if(!value)return today();
+  const s=String(value).trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;
+  let m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(m)return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+  const d=new Date(s);
+  if(!Number.isNaN(d.getTime()))return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  throw new Error('তারিখের ফরম্যাট সঠিক নয়: '+s);
+}
+function readJsonCell(v,fallback){
+  if(!v)return fallback;
+  if(Array.isArray(v)||typeof v==='object')return v;
+  try{return JSON.parse(String(v));}catch(_){return fallback;}
+}
+$('uploadFile').addEventListener('change',async function(e){
+  const file=e.target.files[0];if(!file)return;
+  if(!need()){e.target.value='';return;}
+  try{
+    const buffer=await file.arrayBuffer();
+    const wb=XLSX.read(buffer,{type:'array',cellDates:true});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rawRows=XLSX.utils.sheet_to_json(ws,{defval:'',raw:false});
+    if(!rawRows.length)throw new Error('ফাইলে কোনো ডেটা পাওয়া যায়নি।');
+    const normalized=rawRows.map(r=>{
+      const o={};Object.keys(r).forEach(k=>o[k.trim().toLowerCase()]=r[k]);return o;
+    });
+    const get=(r,...keys)=>{for(const k of keys){const v=r[k.toLowerCase()];if(v!==undefined&&v!==null&&String(v).trim()!=='')return v;}return '';};
+    const imported=[];
+    for(let i=0;i<normalized.length;i++){
+      const r=normalized[i];
+      const name=String(get(r,'Name','Asset Name')).trim();
+      if(!name)continue;
+      const company=String(get(r,'Company')||'AST').trim();
+      const type=String(get(r,'Type','Asset Type')||'Laptop').trim();
+      const holder=String(get(r,'Assigned To','Holder')||'Unassigned').trim();
+      const dept=String(get(r,'Department','Dept')||'Unassigned').trim();
+      const statusValue=String(get(r,'Status')||'Running').trim();
+      const status=STATUSES.includes(statusValue)?statusValue:'Running';
+      const date=parseImportDate(get(r,'Since','Assigned Date','Date'));
+      let config=readJsonCell(get(r,'Config JSON','Configuration JSON'),[]);
+      let history=readJsonCell(get(r,'History JSON','Assignment History JSON'),[]);
+      if(!Array.isArray(config))config=[];
+      if(!Array.isArray(history))history=[];
+      // Backward compatibility with the earlier plain-text Configuration export.
+      if(!config.length){
+        const old=String(get(r,'Configuration')||'');
+        if(old)config=old.split(';').map(part=>{
+          const ix=part.indexOf(':');
+          return ix<0?{k:part.trim(),v:'',s:''}:{k:part.slice(0,ix).trim(),v:part.slice(ix+1).trim(),s:''};
+        }).filter(x=>x.k);
+      }
+      config=config.map(x=>({k:String(x.k??x.field??''),v:String(x.v??x.value??''),s:String(x.s??x.serial??'')}));
+      if(!history.length)history=[{holder,dept,from:date,to:null,note:'Imported assignment'}];
+      history=history.map(h=>({
+        holder:String(h.holder||holder),dept:String(h.dept||dept),
+        from:parseImportDate(h.from||date),to:h.to?parseImportDate(h.to):null,note:String(h.note||'')
+      }));
+      imported.push({company,type,name,holder,dept,status,config,history,sourceCode:String(get(r,'ID','Code','Asset ID')||'').trim()});
+    }
+    if(!imported.length)throw new Error('Name কলামে কোনো Asset পাওয়া যায়নি।');
+    if(!confirm(`${imported.length}টি Asset পাওয়া গেছে। এগুলো Database-এ Import করবেন? একই ID থাকলে নতুন ID তৈরি হবে।`)){e.target.value='';return;}
+
+    // Ensure company/type master records exist before importing assets.
+    for(const name of [...new Set(imported.map(x=>x.company))]){
+      if(!companies.some(c=>c.name.toLowerCase()===name.toLowerCase())){
+        const prefix=makePrefix(name);
+        const {error}=await sb.from('companies').upsert({name,prefix},{onConflict:'name'});
+        if(error)throw new Error('Company "'+name+'" save failed: '+error.message);
+        companies.push({name,prefix});
+      }
+    }
+    for(const name of [...new Set(imported.map(x=>x.type))]){
+      if(!types.includes(name)){
+        const {error}=await sb.from('asset_types').upsert({name},{onConflict:'name'});
+        if(error)throw new Error('Asset Type "'+name+'" save failed: '+error.message);
+        types.push(name);
+      }
+    }
+
+    let success=0;const failures=[];
+    for(const item of imported){
+      // Preserve source ID only if it is unused in the currently loaded asset list.
+      let code=item.sourceCode;
+      if(!code||assets.some(a=>a.code===code))code=nextCode(item.company);
+      let result=await sb.from('assets').insert({
+        company:item.company,type:item.type,name:item.name,holder:item.holder,dept:item.dept,
+        status:item.status,config:item.config,history:item.history,code
+      });
+      // Retry a colliding code using a freshly calculated ID.
+      if(result.error&&result.error.code==='23505'){
+        await loadAll();
+        result=await sb.from('assets').insert({
+          company:item.company,type:item.type,name:item.name,holder:item.holder,dept:item.dept,
+          status:item.status,config:item.config,history:item.history,code:nextCode(item.company)
+        });
+      }
+      if(result.error)failures.push(item.name+': '+result.error.message);else success++;
+    }
+    await loadAll();
+    alert(`Import সম্পন্ন!\nসফল: ${success}\nব্যর্থ: ${failures.length}`+(failures.length?'\n\n'+failures.slice(0,8).join('\n'):''));
+  }catch(err){
+    alert('Upload Error: '+(err.message||String(err)));
+  }finally{
+    e.target.value='';
+  }
+});
+
+function renderAll(){fillCompany();fillFilters();renderList();stats();refreshHead();}
+$('aStatus').innerHTML=STATUSES.map(s=>`<option value="${attr(s)}">${esc(s)}</option>`).join('');
+PRESET_COMPANIES.forEach(n=>companies.push({name:n,prefix:makePrefix(n)}));
+fillPreset('');renderAll();
+
+if(!window.supabase||!window.XLSX){
+  msg('Supabase অথবা Excel library লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।');
+}else{
+  sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  sb.channel('rt')
+    .on('postgres_changes',{event:'*',schema:'public',table:'assets'},schedule)
+    .on('postgres_changes',{event:'*',schema:'public',table:'asset_types'},schedule)
+    .on('postgres_changes',{event:'*',schema:'public',table:'companies'},schedule)
+    .subscribe();
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAll();});
+  loadAll();
+}
+</script>
+</body>
+</html>
