@@ -86,11 +86,11 @@ h1{font-size:2.3rem;font-weight:800;margin:0;background:linear-gradient(to right
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-/* ===== এই দুটো জায়গায় আপনার Project URL ও Publishable key বসান ===== */
-/* Secret key (sb_secret_...) এখানে কখনও বসাবেন না */
-const SUPABASE_URL = 'PASTE_PROJECT_URL_HERE';
-const SUPABASE_KEY = 'PASTE_ANON_KEY_HERE';
-/* ====================================================================== */
+/* ===== এই দুটো জায়গায় আপনার Supabase এর Project URL ও anon public key বসান ===== */
+const SUPABASE_URL = 'https://supabase.com/dashboard/project/ppefbgotnaeozooxpluc/settings/api-keys';
+const SUPABASE_KEY = 'sb_publishable_83W8r7bQykLMM3NyocV-Jg_gy08NEcw
+';
+/* ============================================================================== */
 
 const PRESET = {
     'Laptop':['Brand','Model','CPU','RAM','Storage','Serial No.'],
@@ -123,7 +123,7 @@ const find = id => assets.find(a => a.id === id);
 
 function msg(t) { $('msg').style.display = t ? 'block' : 'none'; $('msg').textContent = t || ''; }
 function need() {
-    if (!sb) { alert('আগে ফাইলের শুরুতে Supabase এর Project URL ও key বসান।'); return false; }
+    if (!sb) { alert('আগে ফাইলের শুরুতে Supabase এর Project URL ও anon key বসান।'); return false; }
     return true;
 }
 
@@ -371,7 +371,7 @@ $('aStatus').innerHTML = STATUSES.map(s => `<option value="${attr(s)}">${esc(s)}
 fillPreset(''); renderAll();
 
 if (SUPABASE_URL.startsWith('PASTE') || SUPABASE_KEY.startsWith('PASTE') || !window.supabase) {
-    msg('Supabase এর Project URL ও Publishable key এখনও বসানো হয়নি। ফাইলের <script> অংশের শুরুতে দুটো লাইনে সেগুলো বসান।');
+    msg('Supabase এর Project URL ও anon key এখনও বসানো হয়নি। ফাইলের <script> অংশের শুরুতে দুটো লাইনে সেগুলো বসান।');
 } else {
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     sb.channel('rt')
