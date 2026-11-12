@@ -41,6 +41,17 @@ h1{font-size:2.3rem;font-weight:800;margin:0;background:linear-gradient(to right
 
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
         <div class="card">
+            <label class="lbl" style="font-size:.9rem;font-weight:600;color:#34d399">Select Company</label>
+            <select id="company" class="fld" style="cursor:pointer"></select>
+        </div>
+        <div class="card">
+            <label class="lbl" style="font-size:.9rem;font-weight:600;color:#fbbf24">Add New Company</label>
+            <div style="display:flex;gap:.6rem"><input id="newCompany" class="fld" placeholder="e.g. Sunrise"><button id="addCompany" class="btn b-pur" style="padding:.6rem 1rem">Add</button></div>
+        </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div class="card">
             <label class="lbl" style="font-size:.9rem;font-weight:600;color:#38bdf8">Select Preset Asset Type</label>
             <select id="preset" class="fld" style="cursor:pointer"></select>
         </div>
@@ -51,7 +62,7 @@ h1{font-size:2.3rem;font-weight:800;margin:0;background:linear-gradient(to right
     </div>
 
     <div id="cfgPanel" class="card" style="display:none;border-color:#38bdf8">
-        <h2 id="cfgTitle" style="margin:0 0 .75rem;font-size:1.1rem;color:#38bdf8">Configuration</h2>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"><h2 id="cfgTitle" style="margin:0;font-size:1.1rem;color:#38bdf8">Configuration</h2><span id="nextId" class="cnt" style="margin:0;font-size:.85rem;padding:.3rem .8rem"></span></div>
         <div class="grid" style="margin-bottom:1rem">
             <div><label class="lbl">Asset Name</label><input id="aName" class="fld" placeholder="e.g. Dell Latitude 01"></div>
             <div><label class="lbl">Assigned To (Person)</label><input id="aHolder" class="fld" placeholder="e.g. Rahim"></div>
@@ -67,6 +78,7 @@ h1{font-size:2.3rem;font-weight:800;margin:0;background:linear-gradient(to right
 
     <div class="card" style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
         <input id="fName" class="fld" placeholder="Filter by Name / Person..." style="flex:1;min-width:160px">
+        <select id="fCompany" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
         <select id="fType" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
         <select id="fDept" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
         <select id="fStatus" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
@@ -105,7 +117,8 @@ const DEFAULT_FIELDS = ['Brand','Model','Serial No.'];
 const STATUSES = ['Running','In Hand','Servicing','Defect'];
 const SC = {'Running':'#34d399','In Hand':'#38bdf8','Servicing':'#fbbf24','Defect':'#f87171'};
 
-let types = Object.keys(PRESET), assets = [], open = {}, cfg = [], modal = null, sb = null, timer;
+const PRESET_COMPANIES = ['Arabi', 'Novel', 'Bengal', 'AST', 'Rosevally'];
+let companies = [], types = Object.keys(PRESET), assets = [], open = {}, cfg = [], modal = null, sb = null, timer;
 const $ = id => document.getElementById(id);
 const esc = s => { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
 const attr = s => esc(s).replace(/"/g, '&quot;');
@@ -129,17 +142,22 @@ function need() {
 /* ---------- Load from database ---------- */
 async function loadAll() {
     if (!sb) return;
-    const [a, t] = await Promise.all([
+    const [a, t, c] = await Promise.all([
         sb.from('assets').select('*').order('id'),
-        sb.from('asset_types').select('name')
+        sb.from('asset_types').select('name'),
+        sb.from('companies').select('name,prefix')
     ]);
     if (a.error) { msg('ডেটা লোড করা যায়নি: ' + a.error.message); return; }
     assets = a.data.map(x => ({
         ...x,
+        company: x.company || 'AST',
+        code: x.code || ('AST-' + String(x.id).padStart(3, '0')),
         config: x.config || [],
         history: x.history && x.history.length ? x.history : [{ holder: x.holder, dept: x.dept, from: today(), to: null, note: 'Initial assignment' }]
     }));
     (t.data || []).forEach(r => { if (!types.includes(r.name)) types.push(r.name); });
+    (c.data || []).forEach(r => { if (!companies.some(x => x.name.toLowerCase() === r.name.toLowerCase())) companies.push({ name: r.name, prefix: r.prefix }); });
+    assets.forEach(x => { if (!companies.some(k => k.name === x.company)) companies.push({ name: x.company, prefix: makePrefix(x.company) }); });
     assets.forEach(x => { if (!types.includes(x.type)) types.push(x.type); });
     msg('');
     renderAll();
@@ -153,8 +171,9 @@ function fillPreset(sel) {
 }
 function loadCfg(type) {
     if (!type) { $('cfgPanel').style.display = 'none'; cfg = []; return; }
+    if (!$('company').value) { alert('প্রথমে Company বাছুন।'); fillPreset(''); return; }
     cfg = (PRESET[type] || DEFAULT_FIELDS).map(k => ({ k, v: '' }));
-    $('cfgTitle').textContent = 'Configuration - ' + type;
+    refreshHead();
     $('aDate').value = today(); $('aDate').max = today(); $('aStatus').value = 'Running';
     drawCfg();
     $('cfgPanel').style.display = 'block';
@@ -186,6 +205,53 @@ async function addType() {
 $('addType').onclick = addType;
 $('newType').onkeydown = e => { if (e.key === 'Enter') addType(); };
 
+/* ---------- Company ---------- */
+function prefixOf(c) { const x = companies.find(k => k.name === c); return x ? x.prefix : 'AST'; }
+function makePrefix(name) {
+    const L = name.replace(/[^A-Za-z0-9]/g, '').toUpperCase() || 'CMP';
+    const used = companies.map(c => c.prefix);
+    for (let n = Math.min(3, L.length); n <= L.length; n++) { if (!used.includes(L.slice(0, n))) return L.slice(0, n); }
+    let i = 2; while (used.includes(L + i)) i++;
+    return L + i;
+}
+function nextCode(company) {
+    const p = prefixOf(company); let max = 0;
+    assets.forEach(a => {
+        if (a.code && a.code.startsWith(p + '-')) { const n = parseInt(a.code.slice(p.length + 1), 10); if (n > max) max = n; }
+    });
+    return p + '-' + String(max + 1).padStart(3, '0');
+}
+function fillCompany(sel) {
+    const v = sel !== undefined ? sel : $('company').value;
+    $('company').innerHTML = '<option value="">-- Select company --</option>' + companies.map(c => `<option value="${attr(c.name)}">${esc(c.name)} (${esc(c.prefix)})</option>`).join('');
+    $('company').value = companies.some(c => c.name === v) ? v : '';
+}
+function refreshHead() {
+    const t = $('preset').value, c = $('company').value;
+    if (t) $('cfgTitle').textContent = 'Configuration - ' + t + ' (' + c + ')';
+    $('nextId').textContent = c ? 'Next ID: ' + nextCode(c) : '';
+}
+$('company').onchange = () => {
+    if (!$('company').value) { fillPreset(''); loadCfg(''); }
+    refreshHead();
+};
+async function addCompany() {
+    const name = $('newCompany').value.trim();
+    if (!name) return;
+    let m = companies.find(c => c.name.toLowerCase() === name.toLowerCase());
+    if (!m) {
+        if (!need()) return;
+        m = { name, prefix: makePrefix(name) };
+        const { error } = await sb.from('companies').upsert(m);
+        if (error) return alert('সেভ হয়নি: ' + error.message);
+        companies.push(m);
+    }
+    fillCompany(m.name); fillFilters(); refreshHead();
+    $('newCompany').value = '';
+}
+$('addCompany').onclick = addCompany;
+$('newCompany').onkeydown = e => { if (e.key === 'Enter') addCompany(); };
+
 /* ---------- Register ---------- */
 $('regBtn').onclick = async () => {
     const type = $('preset').value, name = $('aName').value.trim();
@@ -195,11 +261,19 @@ $('regBtn').onclick = async () => {
     const holder = $('aHolder').value.trim() || 'Unassigned';
     const dept = $('aDept').value.trim() || 'Unassigned';
     const from = $('aDate').value || today();
-    const { error } = await sb.from('assets').insert({
-        type, name, holder, dept, status: $('aStatus').value || 'Running',
+    const company = $('company').value;
+    if (!company) return alert('প্রথমে Company বাছুন।');
+    const row = {
+        company, type, name, holder, dept, status: $('aStatus').value || 'Running',
         config: cfg.filter(r => r.k.trim() && r.v.trim()).map(r => ({ k: r.k.trim(), v: r.v.trim() })),
         history: [{ holder, dept, from, to: null, note: 'Initial assignment' }]
-    });
+    };
+    let error;
+    for (let i = 0; i < 4; i++) {
+        ({ error } = await sb.from('assets').insert({ ...row, code: nextCode(company) }));
+        if (!error || error.code !== '23505') break;
+        await loadAll();
+    }
     if (error) return alert('সেভ হয়নি: ' + error.message);
     open[type] = true;
     ['aName', 'aHolder', 'aDept'].forEach(i => $(i).value = '');
@@ -215,25 +289,26 @@ function fillSel(id, label, items) {
 }
 function fillFilters() {
     const depts = [...new Set(assets.map(a => a.dept))].sort();
+    fillSel('fCompany', 'All Companies', companies.map(c => c.name));
     fillSel('fType', 'All Types', types);
     fillSel('fDept', 'All Departments', depts);
     fillSel('fStatus', 'All Status', STATUSES);
     $('deptList').innerHTML = depts.map(d => `<option value="${attr(d)}">`).join('');
 }
 ['fName'].forEach(i => $(i).oninput = renderList);
-['fDept', 'fStatus'].forEach(i => $(i).onchange = renderList);
+['fCompany', 'fDept', 'fStatus'].forEach(i => $(i).onchange = renderList);
 $('fType').onchange = () => { if ($('fType').value) open[$('fType').value] = true; renderList(); };
 $('expAll').onclick = () => { types.forEach(t => open[t] = true); renderList(); };
 $('colAll').onclick = () => { open = {}; renderList(); };
 
 /* ---------- List ---------- */
 function renderList() {
-    const q = $('fName').value.trim().toLowerCase(), d = $('fDept').value, ft = $('fType').value, fs = $('fStatus').value;
+    const q = $('fName').value.trim().toLowerCase(), d = $('fDept').value, ft = $('fType').value, fs = $('fStatus').value, fc = $('fCompany').value;
     $('typeList').innerHTML = types.map((t, ti) => {
         if (ft && t !== ft) return '';
         const list = assets.filter(a => a.type === t &&
             (!q || a.name.toLowerCase().includes(q) || a.holder.toLowerCase().includes(q)) &&
-            (!d || a.dept === d) && (!fs || a.status === fs));
+            (!d || a.dept === d) && (!fs || a.status === fs) && (!fc || a.company === fc));
         const o = !!open[t];
         const head = `<button class="tbtn${o ? ' open' : ''}" data-t="${ti}"><span>${esc(t)}<span class="cnt">${list.length}</span></span><span class="mut">${o ? '▾' : '▸'}</span></button>`;
         if (!o) return `<div>${head}</div>`;
@@ -246,8 +321,8 @@ function row(a) {
     const c = cur(a), col = SC[a.status] || '#94a3b8';
     const cf = a.config.length ? a.config.map(x => `<div style="font-size:.78rem;line-height:1.5"><span class="mut">${esc(x.k)}:</span> ${esc(x.v)}</div>`).join('') : '<span class="mut">-</span>';
     return `<tr>
-        <td class="mut">AST-${String(a.id).padStart(3, '0')}</td>
-        <td><b>${esc(a.name)}</b></td>
+        <td class="mut">${esc(a.code)}</td>
+        <td><b>${esc(a.name)}</b><div class="mut">${esc(a.company)}</div></td>
         <td><b>${esc(a.holder)}</b><div class="mut">since ${fmt(c.from)} (${dayL(daysBetween(c.from, today()))})</div></td>
         <td>${esc(a.dept)}</td>
         <td>${cf}</td>
@@ -325,7 +400,7 @@ function openHistory(id) {
         return `<tr${h.to ? '' : ' style="background:rgba(52,211,153,.07)"'}><td class="mut">${i + 1}</td><td><b>${esc(h.holder)}</b></td><td>${esc(h.dept)}</td><td>${fmt(h.from)}</td>
             <td>${h.to ? fmt(h.to) : '<b style="color:#34d399">Present</b>'}</td><td><b>${dayL(days)}</b>${h.to ? '' : ' <span class="mut">(so far)</span>'}</td><td class="mut">${h.note ? esc(h.note) : '-'}</td></tr>`;
     }).join('');
-    showModal(`<h3 style="margin:0 0 .3rem;color:#38bdf8">History - ${esc(a.name)} (AST-${String(a.id).padStart(3, '0')})</h3>
+    showModal(`<h3 style="margin:0 0 .3rem;color:#38bdf8">History - ${esc(a.name)} (${esc(a.code)})</h3>
         <p class="mut" style="margin:0 0 1rem;font-size:.85rem">Total in use: <b style="color:#e2e8f0">${dayL(total)}</b> &middot; ${a.history.length} record(s)</p>
         <div class="sc"><table><thead><tr><th>#</th><th>Person</th><th>Department</th><th>From</th><th>To</th><th>Days Used</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table></div>
         <button data-close="1" class="btn big" style="margin-top:1.1rem">Close</button>`);
@@ -352,10 +427,10 @@ function saveFile(name, mime, text) {
 }
 $('csvBtn').onclick = () => {
     const q = v => { v = String(v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
-    const rows = [['ID', 'Type', 'Name', 'Assigned To', 'Department', 'Status', 'Since', 'Days', 'Configuration', 'History']]
+    const rows = [['ID', 'Company', 'Type', 'Name', 'Assigned To', 'Department', 'Status', 'Since', 'Days', 'Configuration', 'History']]
         .concat(assets.map(a => {
             const c = cur(a);
-            return ['AST-' + String(a.id).padStart(3, '0'), a.type, a.name, a.holder, a.dept, a.status, fmt(c.from), daysBetween(c.from, today()),
+            return [a.code, a.company, a.type, a.name, a.holder, a.dept, a.status, fmt(c.from), daysBetween(c.from, today()),
                 a.config.map(x => x.k + ': ' + x.v).join('; '),
                 a.history.map(h => h.holder + ' (' + fmt(h.from) + ' - ' + (h.to ? fmt(h.to) : 'Present') + ')').join(' | ')];
         }));
@@ -364,9 +439,10 @@ $('csvBtn').onclick = () => {
 $('jsonBtn').onclick = () => saveFile('assets-backup-' + today() + '.json', 'application/json', JSON.stringify({ types, assets }, null, 2));
 
 /* ---------- Start ---------- */
-function renderAll() { fillFilters(); renderList(); stats(); }
+function renderAll() { fillCompany(); fillFilters(); renderList(); stats(); refreshHead(); }
 
 $('aStatus').innerHTML = STATUSES.map(s => `<option value="${attr(s)}">${esc(s)}</option>`).join('');
+PRESET_COMPANIES.forEach(n => companies.push({ name: n, prefix: makePrefix(n) }));
 fillPreset(''); renderAll();
 
 if (SUPABASE_URL.startsWith('PASTE') || SUPABASE_KEY.startsWith('PASTE') || !window.supabase) {
@@ -376,6 +452,7 @@ if (SUPABASE_URL.startsWith('PASTE') || SUPABASE_KEY.startsWith('PASTE') || !win
     sb.channel('rt')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'assets' }, schedule)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'asset_types' }, schedule)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'companies' }, schedule)
         .subscribe();
     document.addEventListener('visibilitychange', () => { if (!document.hidden) loadAll(); });
     loadAll();
