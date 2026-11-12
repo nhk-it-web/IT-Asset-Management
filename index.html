@@ -4,489 +4,383 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IT Asset Management System</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:2rem 1rem}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:1.25rem}
+.card{background:#1e293b;border:1px solid #334155;border-radius:.75rem;padding:1.1rem}
+.fld{padding:.6rem;background:#0f172a;border:1px solid #334155;color:#fff;border-radius:.5rem;font-size:.85rem;outline:none;width:100%;color-scheme:dark}
+.fld:focus{border-color:#38bdf8}
+.lbl{display:block;font-size:.75rem;color:#94a3b8;margin-bottom:.3rem}
+.btn{border:0;border-radius:.45rem;padding:.45rem .75rem;cursor:pointer;color:#fff;background:#334155;font-size:.8rem;margin-left:.25rem}
+.b-blue{background:#2563eb}.b-vio{background:#7c3aed}.b-red{background:#7f1d1d}.b-pur{background:#9333ea}
+.big{width:100%;padding:.75rem;font-weight:600;font-size:.9rem;margin:0;border-radius:.5rem}
+.grid{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;color:#94a3b8;padding:.7rem .8rem;border-bottom:1px solid #334155}
+td{padding:.7rem .8rem;border-bottom:1px solid #334155;vertical-align:top}
+.sc{overflow-x:auto}
+.mut{color:#94a3b8;font-size:.75rem}
+.tbtn{width:100%;display:flex;justify-content:space-between;align-items:center;background:#1e293b;border:1px solid #334155;color:#e2e8f0;padding:.9rem 1.1rem;border-radius:.75rem;font-size:1rem;font-weight:600;cursor:pointer}
+.tbtn.open{border-color:#38bdf8;border-radius:.75rem .75rem 0 0}
+.cnt{margin-left:.5rem;font-size:.75rem;padding:.15rem .55rem;border-radius:999px;background:#0f172a;color:#38bdf8}
+.tbl{background:#1e293b;border:1px solid #38bdf8;border-top:0;border-radius:0 0 .75rem .75rem}
+.st{border:1px solid;border-radius:999px;padding:.3rem .5rem;font-size:.78rem;font-weight:600;cursor:pointer;outline:none;color-scheme:dark}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:center;justify-content:center;padding:1rem}
+#mbody{background:#1e293b;border:1px solid #38bdf8;border-radius:.75rem;padding:1.25rem;width:100%;max-width:780px;max-height:88vh;overflow:auto}
+#msg{display:none;background:#7f1d1d;border:1px solid #f87171;border-radius:.6rem;padding:.8rem 1rem;font-size:.85rem}
+h1{font-size:2.3rem;font-weight:800;margin:0;background:linear-gradient(to right,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
+</style>
 </head>
-<body style="font-family: system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem 1rem; box-sizing: border-box;">
+<body>
+<div class="wrap">
+    <div style="text-align:center;border-bottom:1px solid #1e293b;padding-bottom:1.25rem"><h1>IT Asset Management</h1></div>
+    <div id="msg"></div>
 
-<div style="max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+    <div id="stats" class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1rem;text-align:center"></div>
 
-    <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.5rem;">
-        <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">IT Asset Management</h1>
-    </div>
-
-    <!-- Stats -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); background-color: #1e293b; padding: 1.25rem 0.5rem; border-radius: 0.75rem; border: 1px solid #334155; text-align: center; row-gap: 1rem;">
-        <div><span style="font-size: 0.75rem; color: #94a3b8;">Total Assets</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fff;" id="statTotal">0</span></div>
-        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Running</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #34d399;" id="statRunning">0</span></div>
-        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">In Hand</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #38bdf8;" id="statInHand">0</span></div>
-        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Servicing</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #fbbf24;" id="statServicing">0</span></div>
-        <div style="border-left: 1px solid #334155;"><span style="font-size: 0.75rem; color: #94a3b8;">Defect</span><span style="display: block; font-size: 2rem; font-weight: 800; color: #f87171;" id="statDefect">0</span></div>
-    </div>
-
-    <!-- Register -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #38bdf8;">Select Preset Asset Type</label>
-            <select id="presetTypeDropdown" style="width: 100%; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none; cursor: pointer;"></select>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div class="card">
+            <label class="lbl" style="font-size:.9rem;font-weight:600;color:#38bdf8">Select Preset Asset Type</label>
+            <select id="preset" class="fld" style="cursor:pointer"></select>
         </div>
-        <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1.25rem; border-radius: 0.75rem;">
-            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.75rem; color: #c084fc;">Add New Asset Type</label>
-            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <input id="customTypeInput" type="text" placeholder="e.g. Projector" style="width: 100%; box-sizing: border-box; padding: 0.75rem; background-color: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.875rem; outline: none;">
-                <button id="addTypeBtn" style="background-color: #9333ea; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Add Type</button>
-            </div>
+        <div class="card">
+            <label class="lbl" style="font-size:.9rem;font-weight:600;color:#c084fc">Add New Asset Type</label>
+            <div style="display:flex;gap:.6rem"><input id="newType" class="fld" placeholder="e.g. Projector"><button id="addType" class="btn b-pur" style="padding:.6rem 1rem">Add</button></div>
         </div>
     </div>
 
-    <!-- Configuration panel (appears after selecting a type) -->
-    <div id="configPanel" style="display: none; background-color: #1e293b; border: 1px solid #38bdf8; padding: 1.25rem; border-radius: 0.75rem;">
-        <h2 id="configTitle" style="margin: 0 0 0.75rem; font-size: 1.1rem; color: #38bdf8;">Configuration</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
-            <div><label class="lbl">Asset Name</label><input id="assetName" type="text" placeholder="e.g. Dell Latitude 01" class="fld"></div>
-            <div><label class="lbl">Assigned To (Person)</label><input id="assetHolder" type="text" placeholder="e.g. Rahim" class="fld"></div>
-            <div><label class="lbl">Department</label><input id="assetDept" type="text" list="deptList" placeholder="e.g. Accounts" class="fld"></div>
-            <div><label class="lbl">Assigned Date</label><input id="assetDate" type="date" class="fld"></div>
-            <div><label class="lbl">Status</label><select id="assetStatus" class="fld" style="cursor: pointer;"></select></div>
+    <div id="cfgPanel" class="card" style="display:none;border-color:#38bdf8">
+        <h2 id="cfgTitle" style="margin:0 0 .75rem;font-size:1.1rem;color:#38bdf8">Configuration</h2>
+        <div class="grid" style="margin-bottom:1rem">
+            <div><label class="lbl">Asset Name</label><input id="aName" class="fld" placeholder="e.g. Dell Latitude 01"></div>
+            <div><label class="lbl">Assigned To (Person)</label><input id="aHolder" class="fld" placeholder="e.g. Rahim"></div>
+            <div><label class="lbl">Department</label><input id="aDept" class="fld" list="deptList" placeholder="e.g. Accounts"></div>
+            <div><label class="lbl">Assigned Date</label><input id="aDate" type="date" class="fld"></div>
+            <div><label class="lbl">Status</label><select id="aStatus" class="fld" style="cursor:pointer"></select></div>
             <datalist id="deptList"></datalist>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-            <span style="font-size: 0.85rem; color: #94a3b8;">Details</span>
-            <button id="addFieldBtn" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.45rem 0.8rem; cursor: pointer; font-size: 0.8rem;">+ Add Field</button>
-        </div>
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-                <thead><tr style="text-align: left; color: #94a3b8; border-bottom: 1px solid #334155;">
-                    <th style="padding: 0.6rem 0.5rem; width: 35%;">Field</th><th style="padding: 0.6rem 0.5rem;">Value</th><th style="width: 40px;"></th>
-                </tr></thead>
-                <tbody id="configBody"></tbody>
-            </table>
-        </div>
-        <button id="registerBtn" style="margin-top: 1rem; width: 100%; background-color: #2563eb; color: white; padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">Register Asset</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem"><span class="mut">Details</span><button id="addField" class="btn">+ Add Field</button></div>
+        <div class="sc"><table><thead><tr><th style="width:35%">Field</th><th>Value</th><th style="width:40px"></th></tr></thead><tbody id="cfgBody"></tbody></table></div>
+        <button id="regBtn" class="btn b-blue big" style="margin-top:1rem">Register Asset</button>
     </div>
 
-    <!-- Filters -->
-    <div style="background-color: #1e293b; border: 1px solid #334155; padding: 1rem 1.25rem; border-radius: 0.75rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
-        <input id="filterName" type="text" placeholder="Filter by Name / Person..." class="fld" style="flex: 1; min-width: 170px;">
-        <select id="filterType" class="fld" style="flex: 1; min-width: 150px; cursor: pointer;"></select>
-        <select id="filterDept" class="fld" style="flex: 1; min-width: 150px; cursor: pointer;"></select>
-        <select id="filterStatus" class="fld" style="flex: 1; min-width: 150px; cursor: pointer;"></select>
-        <button id="expandAll" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.65rem 0.9rem; cursor: pointer; font-size: 0.8rem;">Expand all</button>
-        <button id="collapseAll" style="background: #334155; color: #fff; border: none; border-radius: 0.4rem; padding: 0.65rem 0.9rem; cursor: pointer; font-size: 0.8rem;">Collapse all</button>
+    <div class="card" style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+        <input id="fName" class="fld" placeholder="Filter by Name / Person..." style="flex:1;min-width:160px">
+        <select id="fType" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+        <select id="fDept" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+        <select id="fStatus" class="fld" style="flex:1;min-width:140px;cursor:pointer"></select>
+        <button id="expAll" class="btn">Expand all</button><button id="colAll" class="btn">Collapse all</button>
     </div>
 
-    <!-- Type options: click to open the hidden table -->
-    <div id="typeList" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
+    <div id="typeList" style="display:flex;flex-direction:column;gap:.7rem"></div>
+
+    <div class="card" style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+        <span class="mut" style="flex:1;min-width:200px">Backup: পুরো তালিকা ফাইল হিসেবে নামিয়ে রাখুন</span>
+        <button id="csvBtn" class="btn b-blue">Download Excel (CSV)</button>
+        <button id="jsonBtn" class="btn">Download JSON</button>
+    </div>
 </div>
 
-<!-- Modal for Transfer and History -->
-<div id="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 50; align-items: center; justify-content: center; padding: 1rem; box-sizing: border-box;">
-    <div id="modalBody" style="background: #1e293b; border: 1px solid #38bdf8; border-radius: 0.75rem; padding: 1.25rem; width: 100%; max-width: 760px; max-height: 88vh; overflow: auto; box-sizing: border-box;"></div>
-</div>
+<div id="modal"><div id="mbody"></div></div>
 
-<style>
-    .fld { box-sizing: border-box; padding: 0.65rem; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 0.5rem; font-size: 0.85rem; outline: none; width: 100%; color-scheme: dark; }
-    .fld:focus { border-color: #38bdf8; }
-    .lbl { display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.3rem; }
-</style>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-    var presetFields = {
-        'Laptop':     ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.'],
-        'Desktop PC': ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'Serial No.'],
-        'Monitor':    ['Brand', 'Model', 'Size', 'Resolution', 'Serial No.'],
-        'Printer':    ['Brand', 'Model', 'Type (Laser/Inkjet)', 'IP Address', 'Serial No.'],
-        'Router':     ['Brand', 'Model', 'IP Address', 'MAC Address', 'Firmware', 'Location'],
-        'Server':     ['Brand', 'Model', 'CPU', 'RAM', 'Storage', 'OS', 'IP Address', 'Location'],
-        'Smartphone': ['Brand', 'Model', 'OS', 'Storage', 'IMEI'],
-        'Keyboard':   ['Brand', 'Model', 'Connection (USB/Wireless)']
-    };
-    var defaultFields = ['Brand', 'Model', 'Serial No.'];
+/* ===== এই দুটো জায়গায় আপনার Project URL ও Publishable key বসান ===== */
+/* Secret key (sb_secret_...) এখানে কখনও বসাবেন না */
+const SUPABASE_URL = 'PASTE_PROJECT_URL_HERE';
+const SUPABASE_KEY = 'PASTE_ANON_KEY_HERE';
+/* ====================================================================== */
 
-    // Status options and colours (background, text)
-    var STATUSES = ['Running', 'In Hand', 'Servicing', 'Defect'];
-    var STATUS_STYLE = {
-        'Running':   ['rgba(52,211,153,0.15)', '#34d399'],
-        'In Hand':   ['rgba(56,189,248,0.15)', '#38bdf8'],
-        'Servicing': ['rgba(251,191,36,0.15)', '#fbbf24'],
-        'Defect':    ['rgba(248,113,113,0.15)', '#f87171']
-    };
+const PRESET = {
+    'Laptop':['Brand','Model','CPU','RAM','Storage','Serial No.'],
+    'Desktop PC':['Brand','Model','CPU','RAM','Storage','Serial No.'],
+    'Monitor':['Brand','Model','Size','Resolution','Serial No.'],
+    'Printer':['Brand','Model','Type (Laser/Inkjet)','IP Address','Serial No.'],
+    'Router':['Brand','Model','IP Address','MAC Address','Firmware','Location'],
+    'Server':['Brand','Model','CPU','RAM','Storage','OS','IP Address','Location'],
+    'Smartphone':['Brand','Model','OS','Storage','IMEI'],
+    'Keyboard':['Brand','Model','Connection (USB/Wireless)']
+};
+const DEFAULT_FIELDS = ['Brand','Model','Serial No.'];
+const STATUSES = ['Running','In Hand','Servicing','Defect'];
+const SC = {'Running':'#34d399','In Hand':'#38bdf8','Servicing':'#fbbf24','Defect':'#f87171'};
 
-    var types = Object.keys(presetFields);
-    var assets = [];
-    var nextId = 1;
-    var openTypes = {};
-    var cfgRows = [];
-    var modalState = null;
+let types = Object.keys(PRESET), assets = [], open = {}, cfg = [], modal = null, sb = null, timer;
+const $ = id => document.getElementById(id);
+const esc = s => { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+const attr = s => esc(s).replace(/"/g, '&quot;');
 
-    var $ = function (id) { return document.getElementById(id); };
-    var dropdown = $('presetTypeDropdown');
+/* ---------- Dates ---------- */
+const pad = n => String(n).padStart(2, '0');
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const utc = s => { const p = s.split('-'); return Date.UTC(+p[0], +p[1] - 1, +p[2]); };
+const daysBetween = (a, b) => Math.round((utc(b) - utc(a)) / 86400000);
+const fmt = s => { const p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; };
+const dayL = n => n + (n === 1 ? ' day' : ' days');
+const cur = a => a.history[a.history.length - 1];
+const find = id => assets.find(a => a.id === id);
 
-    /* ---------- Dates ---------- */
-    function pad(n) { return String(n).padStart(2, '0'); }
-    function today() {
-        var d = new Date();
-        return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-    }
-    function toUtc(s) {
-        var p = s.split('-');
-        return Date.UTC(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
-    }
-    function daysBetween(a, b) { return Math.round((toUtc(b) - toUtc(a)) / 86400000); }
-    function fmt(s) { var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; }
-    function dLabel(n) { return n + (n === 1 ? ' day' : ' days'); }
+function msg(t) { $('msg').style.display = t ? 'block' : 'none'; $('msg').textContent = t || ''; }
+function need() {
+    if (!sb) { alert('আগে ফাইলের শুরুতে Supabase এর Project URL ও key বসান।'); return false; }
+    return true;
+}
 
-    /* ---------- Save / load (this browser only) ---------- */
-    function save() {
-        try { localStorage.setItem('itAssetsV3', JSON.stringify({ types: types, assets: assets, nextId: nextId })); } catch (e) {}
-    }
-    function load() {
-        try {
-            var d = JSON.parse(localStorage.getItem('itAssetsV3') || localStorage.getItem('itAssetsV2'));
-            if (d) { types = d.types || types; assets = d.assets || []; nextId = d.nextId || 1; }
-        } catch (e) {}
-        assets.forEach(function (a) {
-            if (!a.history) {
-                a.holder = a.holder || 'Unassigned';
-                a.history = [{ holder: a.holder, dept: a.dept, from: today(), to: null, note: 'Initial assignment' }];
-            }
-            // Convert old status names to the new ones
-            if (a.status === 'Operational') a.status = 'Running';
-            if (a.status === 'Maintenance') a.status = 'Servicing';
-            if (STATUSES.indexOf(a.status) === -1) a.status = 'Running';
-        });
-    }
-
-    function esc(s) {
-        var d = document.createElement('div');
-        d.textContent = s;
-        return d.innerHTML;
-    }
-    function attr(s) { return esc(s).replace(/"/g, '&quot;'); }
-    function findAsset(id) { return assets.filter(function (a) { return a.id === id; })[0]; }
-    function curEntry(a) { return a.history[a.history.length - 1]; }
-
-    /* ---------- Dropdown + config panel ---------- */
-    function renderDropdown(selected) {
-        dropdown.innerHTML = '<option value="">-- Select asset type --</option>' +
-            types.map(function (t) { return '<option value="' + attr(t) + '">' + esc(t) + '</option>'; }).join('');
-        dropdown.value = selected || '';
-    }
-
-    function loadConfigFor(type) {
-        if (!type) { $('configPanel').style.display = 'none'; cfgRows = []; return; }
-        cfgRows = (presetFields[type] || defaultFields).map(function (f) { return { k: f, v: '' }; });
-        $('configTitle').textContent = 'Configuration - ' + type;
-        $('assetDate').value = today();
-        $('assetDate').max = today();
-        $('assetStatus').value = 'Running';
-        renderConfig();
-        $('configPanel').style.display = 'block';
-    }
-
-    function renderConfig() {
-        $('configBody').innerHTML = cfgRows.map(function (r, i) {
-            return '<tr style="border-bottom:1px solid #334155;">' +
-                '<td style="padding:0.4rem 0.5rem;"><input class="fld" data-i="' + i + '" data-p="k" value="' + attr(r.k) + '"></td>' +
-                '<td style="padding:0.4rem 0.5rem;"><input class="fld" data-i="' + i + '" data-p="v" value="' + attr(r.v) + '" placeholder="Write value..."></td>' +
-                '<td style="text-align:center;"><button data-rm="' + i + '" style="background:none; border:none; color:#f87171; font-size:1.1rem; cursor:pointer;">&times;</button></td></tr>';
-        }).join('');
-    }
-
-    $('configBody').addEventListener('input', function (e) {
-        if (e.target.dataset.i !== undefined) cfgRows[e.target.dataset.i][e.target.dataset.p] = e.target.value;
-    });
-    $('configBody').addEventListener('click', function (e) {
-        var b = e.target.closest('button[data-rm]');
-        if (!b) return;
-        cfgRows.splice(Number(b.dataset.rm), 1);
-        renderConfig();
-    });
-    $('addFieldBtn').addEventListener('click', function () {
-        cfgRows.push({ k: '', v: '' });
-        renderConfig();
-        var l = $('configBody').querySelectorAll('input[data-p="k"]');
-        l[l.length - 1].focus();
-    });
-    dropdown.addEventListener('change', function () { loadConfigFor(dropdown.value); });
-
-    function addCustomType() {
-        var name = $('customTypeInput').value.trim();
-        if (!name) return;
-        var m = types.filter(function (t) { return t.toLowerCase() === name.toLowerCase(); })[0];
-        if (!m) { types.push(name); m = name; save(); }
-        renderDropdown(m);
-        loadConfigFor(m);
-        renderTypeFilter();
-        renderList();
-        $('customTypeInput').value = '';
-    }
-    $('addTypeBtn').addEventListener('click', addCustomType);
-    $('customTypeInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') addCustomType(); });
-
-    /* ---------- Register ---------- */
-    $('registerBtn').addEventListener('click', function () {
-        var type = dropdown.value;
-        var name = $('assetName').value.trim();
-        if (!type) return;
-        if (!name) { alert('অ্যাসেটের Name লিখুন।'); $('assetName').focus(); return; }
-        var holder = $('assetHolder').value.trim() || 'Unassigned';
-        var dept = $('assetDept').value.trim() || 'Unassigned';
-        var from = $('assetDate').value || today();
-        assets.push({
-            id: nextId++, type: type, name: name, holder: holder, dept: dept,
-            status: $('assetStatus').value || 'Running',
-            config: cfgRows.filter(function (r) { return r.k.trim() && r.v.trim(); })
-                           .map(function (r) { return { k: r.k.trim(), v: r.v.trim() }; }),
-            history: [{ holder: holder, dept: dept, from: from, to: null, note: 'Initial assignment' }]
-        });
-        openTypes[type] = true;
-        $('assetName').value = '';
-        $('assetHolder').value = '';
-        $('assetDept').value = '';
-        renderDropdown('');
-        loadConfigFor('');
-        save();
-        renderAll();
-    });
-
-    /* ---------- Filters ---------- */
-    function renderTypeFilter() {
-        var cur = $('filterType').value;
-        $('filterType').innerHTML = '<option value="">All Types</option>' +
-            types.map(function (t) { return '<option value="' + attr(t) + '">' + esc(t) + '</option>'; }).join('');
-        $('filterType').value = types.indexOf(cur) > -1 ? cur : '';
-    }
-
-    function renderStatusFilter() {
-        var cur = $('filterStatus').value;
-        $('filterStatus').innerHTML = '<option value="">All Status</option>' +
-            STATUSES.map(function (s) { return '<option value="' + attr(s) + '">' + esc(s) + '</option>'; }).join('');
-        $('filterStatus').value = STATUSES.indexOf(cur) > -1 ? cur : '';
-    }
-
-    function renderDeptFilter() {
-        var cur = $('filterDept').value;
-        var depts = [];
-        assets.forEach(function (a) { if (depts.indexOf(a.dept) === -1) depts.push(a.dept); });
-        depts.sort();
-        $('filterDept').innerHTML = '<option value="">All Departments</option>' +
-            depts.map(function (d) { return '<option value="' + attr(d) + '">' + esc(d) + '</option>'; }).join('');
-        $('filterDept').value = depts.indexOf(cur) > -1 ? cur : '';
-        $('deptList').innerHTML = depts.map(function (d) { return '<option value="' + attr(d) + '">'; }).join('');
-    }
-
-    $('filterName').addEventListener('input', renderList);
-    $('filterDept').addEventListener('change', renderList);
-    $('filterStatus').addEventListener('change', renderList);
-    $('filterType').addEventListener('change', function () {
-        if ($('filterType').value) openTypes[$('filterType').value] = true;
-        renderList();
-    });
-    $('expandAll').addEventListener('click', function () { types.forEach(function (t) { openTypes[t] = true; }); renderList(); });
-    $('collapseAll').addEventListener('click', function () { openTypes = {}; renderList(); });
-
-    /* ---------- Type list (accordion of hidden tables) ---------- */
-    function statusSelect(a) {
-        var st = STATUS_STYLE[a.status];
-        return '<select data-sid="' + a.id + '" style="background:' + st[0] + '; color:' + st[1] + '; border:1px solid ' + st[1] + '; border-radius:999px; padding:0.3rem 0.5rem; font-size:0.78rem; font-weight:600; cursor:pointer; outline:none; color-scheme:dark;">' +
-            STATUSES.map(function (s) {
-                return '<option value="' + attr(s) + '"' + (s === a.status ? ' selected' : '') + '>' + esc(s) + '</option>';
-            }).join('') + '</select>';
-    }
-
-    function renderList() {
-        var q = $('filterName').value.trim().toLowerCase();
-        var dept = $('filterDept').value;
-        var ft = $('filterType').value;
-        var fs = $('filterStatus').value;
-        $('typeList').innerHTML = types.map(function (t, ti) {
-            if (ft && t !== ft) return '';
-            var list = assets.filter(function (a) {
-                return a.type === t &&
-                    (!q || a.name.toLowerCase().indexOf(q) > -1 || a.holder.toLowerCase().indexOf(q) > -1) &&
-                    (!dept || a.dept === dept) &&
-                    (!fs || a.status === fs);
-            });
-            var open = !!openTypes[t];
-            var head =
-                '<button data-toggle="' + ti + '" style="width:100%; display:flex; justify-content:space-between; align-items:center; background:#1e293b; border:1px solid ' + (open ? '#38bdf8' : '#334155') + '; color:#e2e8f0; padding:0.95rem 1.1rem; border-radius:' + (open ? '0.75rem 0.75rem 0 0' : '0.75rem') + '; font-size:1rem; font-weight:600; cursor:pointer;">' +
-                '<span>' + esc(t) + ' <span style="margin-left:0.5rem; font-size:0.75rem; font-weight:700; padding:0.15rem 0.55rem; border-radius:999px; background:#0f172a; color:#38bdf8;">' + list.length + '</span></span>' +
-                '<span style="color:#94a3b8;">' + (open ? '&#9662;' : '&#9656;') + '</span></button>';
-            if (!open) return '<div>' + head + '</div>';
-            var rows = list.length ? list.map(rowHtml).join('') :
-                '<tr><td colspan="7" style="padding:1.2rem; text-align:center; color:#64748b;">No assets found.</td></tr>';
-            return '<div>' + head +
-                '<div style="background:#1e293b; border:1px solid #38bdf8; border-top:none; border-radius:0 0 0.75rem 0.75rem; overflow-x:auto;">' +
-                '<table style="width:100%; border-collapse:collapse; font-size:0.875rem;"><thead><tr style="text-align:left; color:#94a3b8; border-bottom:1px solid #334155;">' +
-                '<th style="padding:0.8rem 1rem;">ID</th><th style="padding:0.8rem 1rem;">Name</th><th style="padding:0.8rem 1rem;">Assigned To</th><th style="padding:0.8rem 1rem;">Department</th><th style="padding:0.8rem 1rem;">Configuration</th><th style="padding:0.8rem 1rem;">Status</th><th style="padding:0.8rem 1rem; text-align:right;">Actions</th></tr></thead>' +
-                '<tbody>' + rows + '</tbody></table></div></div>';
-        }).join('');
-    }
-
-    function rowHtml(a) {
-        var cur = curEntry(a);
-        var used = daysBetween(cur.from, today());
-        var cfg = a.config.length ? a.config.map(function (c) {
-            return '<div style="font-size:0.78rem; line-height:1.5;"><span style="color:#94a3b8;">' + esc(c.k) + ':</span> ' + esc(c.v) + '</div>';
-        }).join('') : '<span style="color:#64748b;">-</span>';
-        var btn = 'border:none; border-radius:0.4rem; padding:0.4rem 0.7rem; cursor:pointer; margin-left:0.3rem; color:#fff;';
-        return '<tr style="border-bottom:1px solid #334155; vertical-align:top;">' +
-            '<td style="padding:0.8rem 1rem; color:#94a3b8;">AST-' + String(a.id).padStart(3, '0') + '</td>' +
-            '<td style="padding:0.8rem 1rem; font-weight:600;">' + esc(a.name) + '</td>' +
-            '<td style="padding:0.8rem 1rem;"><div style="font-weight:600;">' + esc(a.holder) + '</div>' +
-                '<div style="font-size:0.75rem; color:#94a3b8;">since ' + fmt(cur.from) + ' (' + dLabel(used) + ')</div></td>' +
-            '<td style="padding:0.8rem 1rem;">' + esc(a.dept) + '</td>' +
-            '<td style="padding:0.8rem 1rem;">' + cfg + '</td>' +
-            '<td style="padding:0.8rem 1rem;">' + statusSelect(a) + '</td>' +
-            '<td style="padding:0.8rem 1rem; text-align:right; white-space:nowrap;">' +
-                '<button data-act="transfer" data-id="' + a.id + '" style="background:#2563eb; ' + btn + '">Transfer</button>' +
-                '<button data-act="history" data-id="' + a.id + '" style="background:#7c3aed; ' + btn + '">History (' + a.history.length + ')</button>' +
-                '<button data-act="del" data-id="' + a.id + '" style="background:#7f1d1d; ' + btn + '">Delete</button></td></tr>';
-    }
-
-    // Change status from the table
-    $('typeList').addEventListener('change', function (e) {
-        var s = e.target.closest('select[data-sid]');
-        if (!s) return;
-        var a = findAsset(Number(s.dataset.sid));
-        if (!a) return;
-        a.status = s.value;
-        save();
-        renderAll();
-    });
-
-    $('typeList').addEventListener('click', function (e) {
-        var t = e.target.closest('button[data-toggle]');
-        if (t) {
-            var name = types[Number(t.dataset.toggle)];
-            openTypes[name] = !openTypes[name];
-            renderList();
-            return;
-        }
-        var b = e.target.closest('button[data-act]');
-        if (!b) return;
-        var id = Number(b.dataset.id);
-        var act = b.dataset.act;
-        if (act === 'transfer') return openTransfer(id);
-        if (act === 'history') return openHistory(id);
-        if (act === 'del') {
-            if (!confirm('এই অ্যাসেটটা মুছে ফেলবেন? এর হিস্ট্রিও মুছে যাবে।')) return;
-            assets = assets.filter(function (a) { return a.id !== id; });
-            save();
-            renderAll();
-        }
-    });
-
-    /* ---------- Modal: Transfer ---------- */
-    function showModal(html) { $('modalBody').innerHTML = html; $('modal').style.display = 'flex'; }
-    function closeModal() { $('modal').style.display = 'none'; modalState = null; }
-
-    function openTransfer(id) {
-        var a = findAsset(id);
-        var cur = curEntry(a);
-        var t = today();
-        modalState = { id: id };
-        showModal(
-            '<h3 style="margin:0 0 0.4rem; color:#38bdf8;">Transfer - ' + esc(a.name) + '</h3>' +
-            '<p style="margin:0 0 1rem; font-size:0.85rem; color:#94a3b8;">Currently with <b style="color:#e2e8f0;">' + esc(a.holder) + '</b> (' + esc(a.dept) + ') since ' + fmt(cur.from) + ' - ' + dLabel(daysBetween(cur.from, t)) + '</p>' +
-            '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0.75rem;">' +
-                '<div><label class="lbl">Transfer To (Person)</label><input id="tfHolder" class="fld" type="text" placeholder="e.g. Karim"></div>' +
-                '<div><label class="lbl">Department</label><input id="tfDept" class="fld" type="text" list="deptList" value="' + attr(a.dept) + '"></div>' +
-                '<div><label class="lbl">Transfer Date</label><input id="tfDate" class="fld" type="date" min="' + cur.from + '" max="' + t + '" value="' + (t < cur.from ? cur.from : t) + '"></div>' +
-                '<div><label class="lbl">Note (optional)</label><input id="tfNote" class="fld" type="text" placeholder="e.g. Role change"></div>' +
-            '</div>' +
-            '<div style="display:flex; gap:0.6rem; margin-top:1.1rem;">' +
-                '<button id="tfConfirm" style="flex:1; background:#2563eb; color:#fff; border:none; border-radius:0.5rem; padding:0.75rem; font-weight:600; cursor:pointer;">Confirm Transfer</button>' +
-                '<button data-close="1" style="background:#334155; color:#fff; border:none; border-radius:0.5rem; padding:0.75rem 1.2rem; cursor:pointer;">Cancel</button>' +
-            '</div>'
-        );
-        $('tfHolder').focus();
-    }
-
-    function doTransfer() {
-        if (!modalState) return;
-        var a = findAsset(modalState.id);
-        var cur = curEntry(a);
-        var holder = $('tfHolder').value.trim();
-        var dept = $('tfDept').value.trim() || 'Unassigned';
-        var date = $('tfDate').value;
-        var note = $('tfNote').value.trim();
-        if (!holder) { alert('কার কাছে ট্রান্সফার করবেন তার নাম লিখুন।'); return; }
-        if (!date) { alert('ট্রান্সফারের তারিখ দিন।'); return; }
-        if (date < cur.from) { alert('ট্রান্সফারের তারিখ আগের এসাইন তারিখ (' + fmt(cur.from) + ') এর আগে হতে পারবে না।'); return; }
-        if (date > today()) { alert('ভবিষ্যতের তারিখ দেওয়া যাবে না।'); return; }
-        if (holder.toLowerCase() === a.holder.toLowerCase() && dept.toLowerCase() === a.dept.toLowerCase()) {
-            alert('এই অ্যাসেট আগে থেকেই এই ব্যক্তির কাছে আছে।'); return;
-        }
-        cur.to = date;
-        a.history.push({ holder: holder, dept: dept, from: date, to: null, note: note });
-        a.holder = holder;
-        a.dept = dept;
-        openTypes[a.type] = true;
-        save();
-        closeModal();
-        renderAll();
-    }
-
-    /* ---------- Modal: History ---------- */
-    function openHistory(id) {
-        var a = findAsset(id);
-        var t = today();
-        var total = 0;
-        var rows = a.history.map(function (h, i) {
-            var end = h.to || t;
-            var days = daysBetween(h.from, end);
-            total += days;
-            var isCur = !h.to;
-            return '<tr style="border-bottom:1px solid #334155;' + (isCur ? ' background:rgba(52,211,153,0.07);' : '') + '">' +
-                '<td style="padding:0.65rem 0.7rem; color:#94a3b8;">' + (i + 1) + '</td>' +
-                '<td style="padding:0.65rem 0.7rem; font-weight:600;">' + esc(h.holder) + '</td>' +
-                '<td style="padding:0.65rem 0.7rem;">' + esc(h.dept) + '</td>' +
-                '<td style="padding:0.65rem 0.7rem;">' + fmt(h.from) + '</td>' +
-                '<td style="padding:0.65rem 0.7rem;">' + (isCur ? '<span style="color:#34d399; font-weight:600;">Present</span>' : fmt(h.to)) + '</td>' +
-                '<td style="padding:0.65rem 0.7rem; font-weight:600;">' + dLabel(days) + (isCur ? ' <span style="color:#94a3b8; font-weight:400;">(so far)</span>' : '') + '</td>' +
-                '<td style="padding:0.65rem 0.7rem; color:#94a3b8;">' + (h.note ? esc(h.note) : '-') + '</td></tr>';
-        }).join('');
-        showModal(
-            '<h3 style="margin:0 0 0.3rem; color:#38bdf8;">History - ' + esc(a.name) + ' (AST-' + String(a.id).padStart(3, '0') + ')</h3>' +
-            '<p style="margin:0 0 1rem; font-size:0.85rem; color:#94a3b8;">Total in use: <b style="color:#e2e8f0;">' + dLabel(total) + '</b> &middot; ' + a.history.length + ' record(s)</p>' +
-            '<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:0.85rem;">' +
-            '<thead><tr style="text-align:left; color:#94a3b8; border-bottom:1px solid #334155;">' +
-            '<th style="padding:0.6rem 0.7rem;">#</th><th style="padding:0.6rem 0.7rem;">Person</th><th style="padding:0.6rem 0.7rem;">Department</th><th style="padding:0.6rem 0.7rem;">From</th><th style="padding:0.6rem 0.7rem;">To</th><th style="padding:0.6rem 0.7rem;">Days Used</th><th style="padding:0.6rem 0.7rem;">Note</th></tr></thead>' +
-            '<tbody>' + rows + '</tbody></table></div>' +
-            '<button data-close="1" style="margin-top:1.1rem; width:100%; background:#334155; color:#fff; border:none; border-radius:0.5rem; padding:0.75rem; cursor:pointer;">Close</button>'
-        );
-    }
-
-    $('modal').addEventListener('click', function (e) {
-        if (e.target === $('modal') || e.target.closest('[data-close]')) return closeModal();
-        if (e.target.id === 'tfConfirm') doTransfer();
-    });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
-
-    /* ---------- Stats ---------- */
-    function countStatus(s) { return assets.filter(function (a) { return a.status === s; }).length; }
-
-    function updateStats() {
-        $('statTotal').textContent = assets.length;
-        $('statRunning').textContent = countStatus('Running');
-        $('statInHand').textContent = countStatus('In Hand');
-        $('statServicing').textContent = countStatus('Servicing');
-        $('statDefect').textContent = countStatus('Defect');
-    }
-
-    function renderAll() {
-        renderTypeFilter();
-        renderDeptFilter();
-        renderList();
-        updateStats();
-    }
-
-    /* ---------- Start ---------- */
-    load();
-    $('assetStatus').innerHTML = STATUSES.map(function (s) { return '<option value="' + attr(s) + '">' + esc(s) + '</option>'; }).join('');
-    renderStatusFilter();
-    renderDropdown('');
+/* ---------- Load from database ---------- */
+async function loadAll() {
+    if (!sb) return;
+    const [a, t] = await Promise.all([
+        sb.from('assets').select('*').order('id'),
+        sb.from('asset_types').select('name')
+    ]);
+    if (a.error) { msg('ডেটা লোড করা যায়নি: ' + a.error.message); return; }
+    assets = a.data.map(x => ({
+        ...x,
+        config: x.config || [],
+        history: x.history && x.history.length ? x.history : [{ holder: x.holder, dept: x.dept, from: today(), to: null, note: 'Initial assignment' }]
+    }));
+    (t.data || []).forEach(r => { if (!types.includes(r.name)) types.push(r.name); });
+    assets.forEach(x => { if (!types.includes(x.type)) types.push(x.type); });
+    msg('');
     renderAll();
+}
+const schedule = () => { clearTimeout(timer); timer = setTimeout(loadAll, 300); };
+
+/* ---------- Config panel ---------- */
+function fillPreset(sel) {
+    $('preset').innerHTML = '<option value="">-- Select asset type --</option>' + types.map(t => `<option value="${attr(t)}">${esc(t)}</option>`).join('');
+    $('preset').value = sel || '';
+}
+function loadCfg(type) {
+    if (!type) { $('cfgPanel').style.display = 'none'; cfg = []; return; }
+    cfg = (PRESET[type] || DEFAULT_FIELDS).map(k => ({ k, v: '' }));
+    $('cfgTitle').textContent = 'Configuration - ' + type;
+    $('aDate').value = today(); $('aDate').max = today(); $('aStatus').value = 'Running';
+    drawCfg();
+    $('cfgPanel').style.display = 'block';
+}
+function drawCfg() {
+    $('cfgBody').innerHTML = cfg.map((r, i) => `<tr>
+        <td><input class="fld" data-i="${i}" data-p="k" value="${attr(r.k)}"></td>
+        <td><input class="fld" data-i="${i}" data-p="v" value="${attr(r.v)}" placeholder="Write value..."></td>
+        <td style="text-align:center"><button data-rm="${i}" style="background:none;border:0;color:#f87171;font-size:1.1rem;cursor:pointer">&times;</button></td></tr>`).join('');
+}
+$('cfgBody').addEventListener('input', e => { if (e.target.dataset.i !== undefined) cfg[e.target.dataset.i][e.target.dataset.p] = e.target.value; });
+$('cfgBody').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { cfg.splice(+b.dataset.rm, 1); drawCfg(); } });
+$('addField').onclick = () => { cfg.push({ k: '', v: '' }); drawCfg(); const l = $('cfgBody').querySelectorAll('[data-p="k"]'); l[l.length - 1].focus(); };
+$('preset').onchange = () => loadCfg($('preset').value);
+
+async function addType() {
+    const name = $('newType').value.trim();
+    if (!name) return;
+    let m = types.find(t => t.toLowerCase() === name.toLowerCase());
+    if (!m) {
+        if (!need()) return;
+        const { error } = await sb.from('asset_types').upsert({ name });
+        if (error) return alert('সেভ হয়নি: ' + error.message);
+        types.push(name); m = name;
+    }
+    fillPreset(m); loadCfg(m); fillFilters(); renderList();
+    $('newType').value = '';
+}
+$('addType').onclick = addType;
+$('newType').onkeydown = e => { if (e.key === 'Enter') addType(); };
+
+/* ---------- Register ---------- */
+$('regBtn').onclick = async () => {
+    const type = $('preset').value, name = $('aName').value.trim();
+    if (!type) return;
+    if (!name) { alert('অ্যাসেটের Name লিখুন।'); $('aName').focus(); return; }
+    if (!need()) return;
+    const holder = $('aHolder').value.trim() || 'Unassigned';
+    const dept = $('aDept').value.trim() || 'Unassigned';
+    const from = $('aDate').value || today();
+    const { error } = await sb.from('assets').insert({
+        type, name, holder, dept, status: $('aStatus').value || 'Running',
+        config: cfg.filter(r => r.k.trim() && r.v.trim()).map(r => ({ k: r.k.trim(), v: r.v.trim() })),
+        history: [{ holder, dept, from, to: null, note: 'Initial assignment' }]
+    });
+    if (error) return alert('সেভ হয়নি: ' + error.message);
+    open[type] = true;
+    ['aName', 'aHolder', 'aDept'].forEach(i => $(i).value = '');
+    fillPreset(''); loadCfg('');
+    loadAll();
+};
+
+/* ---------- Filters ---------- */
+function fillSel(id, label, items) {
+    const v = $(id).value;
+    $(id).innerHTML = `<option value="">${label}</option>` + items.map(x => `<option value="${attr(x)}">${esc(x)}</option>`).join('');
+    $(id).value = items.includes(v) ? v : '';
+}
+function fillFilters() {
+    const depts = [...new Set(assets.map(a => a.dept))].sort();
+    fillSel('fType', 'All Types', types);
+    fillSel('fDept', 'All Departments', depts);
+    fillSel('fStatus', 'All Status', STATUSES);
+    $('deptList').innerHTML = depts.map(d => `<option value="${attr(d)}">`).join('');
+}
+['fName'].forEach(i => $(i).oninput = renderList);
+['fDept', 'fStatus'].forEach(i => $(i).onchange = renderList);
+$('fType').onchange = () => { if ($('fType').value) open[$('fType').value] = true; renderList(); };
+$('expAll').onclick = () => { types.forEach(t => open[t] = true); renderList(); };
+$('colAll').onclick = () => { open = {}; renderList(); };
+
+/* ---------- List ---------- */
+function renderList() {
+    const q = $('fName').value.trim().toLowerCase(), d = $('fDept').value, ft = $('fType').value, fs = $('fStatus').value;
+    $('typeList').innerHTML = types.map((t, ti) => {
+        if (ft && t !== ft) return '';
+        const list = assets.filter(a => a.type === t &&
+            (!q || a.name.toLowerCase().includes(q) || a.holder.toLowerCase().includes(q)) &&
+            (!d || a.dept === d) && (!fs || a.status === fs));
+        const o = !!open[t];
+        const head = `<button class="tbtn${o ? ' open' : ''}" data-t="${ti}"><span>${esc(t)}<span class="cnt">${list.length}</span></span><span class="mut">${o ? '▾' : '▸'}</span></button>`;
+        if (!o) return `<div>${head}</div>`;
+        const rows = list.length ? list.map(row).join('') : '<tr><td colspan="7" class="mut" style="text-align:center;padding:1.2rem">No assets found.</td></tr>';
+        return `<div>${head}<div class="tbl sc"><table><thead><tr><th>ID</th><th>Name</th><th>Assigned To</th><th>Department</th><th>Configuration</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+    }).join('');
+}
+
+function row(a) {
+    const c = cur(a), col = SC[a.status] || '#94a3b8';
+    const cf = a.config.length ? a.config.map(x => `<div style="font-size:.78rem;line-height:1.5"><span class="mut">${esc(x.k)}:</span> ${esc(x.v)}</div>`).join('') : '<span class="mut">-</span>';
+    return `<tr>
+        <td class="mut">AST-${String(a.id).padStart(3, '0')}</td>
+        <td><b>${esc(a.name)}</b></td>
+        <td><b>${esc(a.holder)}</b><div class="mut">since ${fmt(c.from)} (${dayL(daysBetween(c.from, today()))})</div></td>
+        <td>${esc(a.dept)}</td>
+        <td>${cf}</td>
+        <td><select class="st" data-s="${a.id}" style="background:${col}22;color:${col};border-color:${col}">${STATUSES.map(s => `<option value="${attr(s)}"${s === a.status ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select></td>
+        <td style="text-align:right;white-space:nowrap">
+            <button class="btn b-blue" data-a="tr" data-id="${a.id}">Transfer</button>
+            <button class="btn b-vio" data-a="hi" data-id="${a.id}">History (${a.history.length})</button>
+            <button class="btn b-red" data-a="del" data-id="${a.id}">Delete</button></td></tr>`;
+}
+
+$('typeList').addEventListener('change', async e => {
+    const s = e.target.closest('[data-s]');
+    if (!s || !need()) return;
+    const { error } = await sb.from('assets').update({ status: s.value }).eq('id', +s.dataset.s);
+    if (error) alert('সেভ হয়নি: ' + error.message);
+    loadAll();
+});
+$('typeList').addEventListener('click', async e => {
+    const t = e.target.closest('[data-t]');
+    if (t) { const n = types[+t.dataset.t]; open[n] = !open[n]; return renderList(); }
+    const b = e.target.closest('[data-a]');
+    if (!b) return;
+    const id = +b.dataset.id;
+    if (b.dataset.a === 'tr') return openTransfer(id);
+    if (b.dataset.a === 'hi') return openHistory(id);
+    if (!confirm('এই অ্যাসেটটা মুছে ফেলবেন? এর হিস্ট্রিও মুছে যাবে।') || !need()) return;
+    const { error } = await sb.from('assets').delete().eq('id', id);
+    if (error) alert('মোছা যায়নি: ' + error.message);
+    loadAll();
+});
+
+/* ---------- Modal ---------- */
+const showModal = h => { $('mbody').innerHTML = h; $('modal').style.display = 'flex'; };
+const closeModal = () => { $('modal').style.display = 'none'; modal = null; };
+
+function openTransfer(id) {
+    const a = find(id), c = cur(a), t = today();
+    modal = id;
+    showModal(`<h3 style="margin:0 0 .4rem;color:#38bdf8">Transfer - ${esc(a.name)}</h3>
+        <p class="mut" style="margin:0 0 1rem;font-size:.85rem">Currently with <b style="color:#e2e8f0">${esc(a.holder)}</b> (${esc(a.dept)}) since ${fmt(c.from)} - ${dayL(daysBetween(c.from, t))}</p>
+        <div class="grid">
+            <div><label class="lbl">Transfer To (Person)</label><input id="tHolder" class="fld" placeholder="e.g. Karim"></div>
+            <div><label class="lbl">Department</label><input id="tDept" class="fld" list="deptList" value="${attr(a.dept)}"></div>
+            <div><label class="lbl">Transfer Date</label><input id="tDate" type="date" class="fld" min="${c.from}" max="${t}" value="${t < c.from ? c.from : t}"></div>
+            <div><label class="lbl">Note (optional)</label><input id="tNote" class="fld" placeholder="e.g. Role change"></div>
+        </div>
+        <div style="display:flex;gap:.6rem;margin-top:1.1rem">
+            <button id="tOk" class="btn b-blue big" style="flex:1">Confirm Transfer</button>
+            <button data-close="1" class="btn big" style="width:auto;padding:.75rem 1.2rem">Cancel</button></div>`);
+    $('tHolder').focus();
+}
+
+async function doTransfer() {
+    const a = find(modal);
+    if (!a || !need()) return;
+    const c = cur(a), holder = $('tHolder').value.trim(), dept = $('tDept').value.trim() || 'Unassigned', date = $('tDate').value, note = $('tNote').value.trim();
+    if (!holder) return alert('কার কাছে ট্রান্সফার করবেন তার নাম লিখুন।');
+    if (!date) return alert('ট্রান্সফারের তারিখ দিন।');
+    if (date < c.from) return alert('ট্রান্সফারের তারিখ আগের এসাইন তারিখ (' + fmt(c.from) + ') এর আগে হতে পারবে না।');
+    if (date > today()) return alert('ভবিষ্যতের তারিখ দেওয়া যাবে না।');
+    if (holder.toLowerCase() === a.holder.toLowerCase() && dept.toLowerCase() === a.dept.toLowerCase()) return alert('এই অ্যাসেট আগে থেকেই এই ব্যক্তির কাছে আছে।');
+    const history = a.history.map((h, i) => i === a.history.length - 1 ? { ...h, to: date } : h).concat({ holder, dept, from: date, to: null, note });
+    const { error } = await sb.from('assets').update({ holder, dept, history }).eq('id', a.id);
+    if (error) return alert('সেভ হয়নি: ' + error.message);
+    open[a.type] = true;
+    closeModal();
+    loadAll();
+}
+
+function openHistory(id) {
+    const a = find(id), t = today();
+    let total = 0;
+    const rows = a.history.map((h, i) => {
+        const days = daysBetween(h.from, h.to || t); total += days;
+        return `<tr${h.to ? '' : ' style="background:rgba(52,211,153,.07)"'}><td class="mut">${i + 1}</td><td><b>${esc(h.holder)}</b></td><td>${esc(h.dept)}</td><td>${fmt(h.from)}</td>
+            <td>${h.to ? fmt(h.to) : '<b style="color:#34d399">Present</b>'}</td><td><b>${dayL(days)}</b>${h.to ? '' : ' <span class="mut">(so far)</span>'}</td><td class="mut">${h.note ? esc(h.note) : '-'}</td></tr>`;
+    }).join('');
+    showModal(`<h3 style="margin:0 0 .3rem;color:#38bdf8">History - ${esc(a.name)} (AST-${String(a.id).padStart(3, '0')})</h3>
+        <p class="mut" style="margin:0 0 1rem;font-size:.85rem">Total in use: <b style="color:#e2e8f0">${dayL(total)}</b> &middot; ${a.history.length} record(s)</p>
+        <div class="sc"><table><thead><tr><th>#</th><th>Person</th><th>Department</th><th>From</th><th>To</th><th>Days Used</th><th>Note</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <button data-close="1" class="btn big" style="margin-top:1.1rem">Close</button>`);
+}
+
+$('modal').addEventListener('click', e => {
+    if (e.target === $('modal') || e.target.closest('[data-close]')) return closeModal();
+    if (e.target.id === 'tOk') doTransfer();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ---------- Stats ---------- */
+function stats() {
+    $('stats').innerHTML = [['Total Assets', assets.length, '#fff'], ...STATUSES.map(s => [s, assets.filter(a => a.status === s).length, SC[s]])]
+        .map(([l, n, c]) => `<div><span class="mut">${l}</span><span style="display:block;font-size:2rem;font-weight:800;color:${c}">${n}</span></div>`).join('');
+}
+
+/* ---------- Backup download ---------- */
+function saveFile(name, mime, text) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: mime }));
+    a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+$('csvBtn').onclick = () => {
+    const q = v => { v = String(v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+    const rows = [['ID', 'Type', 'Name', 'Assigned To', 'Department', 'Status', 'Since', 'Days', 'Configuration', 'History']]
+        .concat(assets.map(a => {
+            const c = cur(a);
+            return ['AST-' + String(a.id).padStart(3, '0'), a.type, a.name, a.holder, a.dept, a.status, fmt(c.from), daysBetween(c.from, today()),
+                a.config.map(x => x.k + ': ' + x.v).join('; '),
+                a.history.map(h => h.holder + ' (' + fmt(h.from) + ' - ' + (h.to ? fmt(h.to) : 'Present') + ')').join(' | ')];
+        }));
+    saveFile('assets-' + today() + '.csv', 'text/csv;charset=utf-8', '\ufeff' + rows.map(r => r.map(q).join(',')).join('\r\n'));
+};
+$('jsonBtn').onclick = () => saveFile('assets-backup-' + today() + '.json', 'application/json', JSON.stringify({ types, assets }, null, 2));
+
+/* ---------- Start ---------- */
+function renderAll() { fillFilters(); renderList(); stats(); }
+
+$('aStatus').innerHTML = STATUSES.map(s => `<option value="${attr(s)}">${esc(s)}</option>`).join('');
+fillPreset(''); renderAll();
+
+if (SUPABASE_URL.startsWith('PASTE') || SUPABASE_KEY.startsWith('PASTE') || !window.supabase) {
+    msg('Supabase এর Project URL ও Publishable key এখনও বসানো হয়নি। ফাইলের <script> অংশের শুরুতে দুটো লাইনে সেগুলো বসান।');
+} else {
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    sb.channel('rt')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'assets' }, schedule)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'asset_types' }, schedule)
+        .subscribe();
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) loadAll(); });
+    loadAll();
+}
 </script>
 </body>
 </html>
