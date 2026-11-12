@@ -201,7 +201,10 @@ function loadCfg(type){
   if(!$('company').value){alert('প্রথমে Company বাছুন।');fillPreset('');return;}
   cfg=(PRESET[type]||DEFAULT_FIELDS).map(k=>({k,v:'',s:''}));
   refreshHead();$('aDate').value=today();$('aDate').max=today();$('aStatus').value='Running';
-  $('aName').value='';$('aHolder').value='';$('aDept').value='';
+  // Automatically use the selected Asset Type as the initial Asset Name.
+  // The user can still edit it to enter a more specific name/model identifier.
+  $('aName').value=type;
+  $('aHolder').value='';$('aDept').value='';
   drawCfg();$('cfgPanel').style.display='block';
 }
 function drawCfg(){
