@@ -72,7 +72,7 @@ h1{font-size:2.3rem;font-weight:800;margin:0;background:linear-gradient(to right
             <datalist id="deptList"></datalist>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem"><span class="mut">Details</span><button id="addField" class="btn">+ Add Field</button></div>
-        <div class="sc"><table><thead><tr><th style="width:35%">Field</th><th>Value</th><th style="width:40px"></th></tr></thead><tbody id="cfgBody"></tbody></table></div>
+        <div class="sc"><table><thead><tr><th style="width:28%">Field</th><th>Value</th><th style="width:28%">Serial No.</th><th style="width:40px"></th></tr></thead><tbody id="cfgBody"></tbody></table></div>
         <button id="regBtn" class="btn b-blue big" style="margin-top:1rem">Register Asset</button>
     </div>
 
@@ -172,7 +172,7 @@ function fillPreset(sel) {
 function loadCfg(type) {
     if (!type) { $('cfgPanel').style.display = 'none'; cfg = []; return; }
     if (!$('company').value) { alert('প্রথমে Company বাছুন।'); fillPreset(''); return; }
-    cfg = (PRESET[type] || DEFAULT_FIELDS).map(k => ({ k, v: '' }));
+    cfg = (PRESET[type] || DEFAULT_FIELDS).map(k => ({ k, v: '', s: '' }));
     refreshHead();
     $('aDate').value = today(); $('aDate').max = today(); $('aStatus').value = 'Running';
     drawCfg();
@@ -182,11 +182,12 @@ function drawCfg() {
     $('cfgBody').innerHTML = cfg.map((r, i) => `<tr>
         <td><input class="fld" data-i="${i}" data-p="k" value="${attr(r.k)}"></td>
         <td><input class="fld" data-i="${i}" data-p="v" value="${attr(r.v)}" placeholder="Write value..."></td>
+        <td><input class="fld" data-i="${i}" data-p="s" value="${attr(r.s || '')}" placeholder="Serial No."></td>
         <td style="text-align:center"><button data-rm="${i}" style="background:none;border:0;color:#f87171;font-size:1.1rem;cursor:pointer">&times;</button></td></tr>`).join('');
 }
 $('cfgBody').addEventListener('input', e => { if (e.target.dataset.i !== undefined) cfg[e.target.dataset.i][e.target.dataset.p] = e.target.value; });
 $('cfgBody').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (b) { cfg.splice(+b.dataset.rm, 1); drawCfg(); } });
-$('addField').onclick = () => { cfg.push({ k: '', v: '' }); drawCfg(); const l = $('cfgBody').querySelectorAll('[data-p="k"]'); l[l.length - 1].focus(); };
+$('addField').onclick = () => { cfg.push({ k: '', v: '', s: '' }); drawCfg(); const l = $('cfgBody').querySelectorAll('[data-p="k"]'); l[l.length - 1].focus(); };
 $('preset').onchange = () => loadCfg($('preset').value);
 
 async function addType() {
@@ -265,7 +266,7 @@ $('regBtn').onclick = async () => {
     if (!company) return alert('প্রথমে Company বাছুন।');
     const row = {
         company, type, name, holder, dept, status: $('aStatus').value || 'Running',
-        config: cfg.filter(r => r.k.trim() && r.v.trim()).map(r => ({ k: r.k.trim(), v: r.v.trim() })),
+        config: cfg.filter(r => r.k.trim() && (r.v.trim() || (r.s || '').trim())).map(r => ({ k: r.k.trim(), v: r.v.trim(), s: (r.s || '').trim() })),
         history: [{ holder, dept, from, to: null, note: 'Initial assignment' }]
     };
     let error;
@@ -319,7 +320,7 @@ function renderList() {
 
 function row(a) {
     const c = cur(a), col = SC[a.status] || '#94a3b8';
-    const cf = a.config.length ? a.config.map(x => `<div style="font-size:.78rem;line-height:1.5"><span class="mut">${esc(x.k)}:</span> ${esc(x.v)}</div>`).join('') : '<span class="mut">-</span>';
+    const cf = a.config.length ? a.config.map(x => `<div style="font-size:.78rem;line-height:1.5"><span class="mut">${esc(x.k)}:</span> ${esc(x.v || '-')}${x.s ? ' <span class="mut">(S/N: ' + esc(x.s) + ')</span>' : ''}</div>`).join('') : '<span class="mut">-</span>';
     return `<tr>
         <td class="mut">${esc(a.code)}</td>
         <td><b>${esc(a.name)}</b><div class="mut">${esc(a.company)}</div></td>
@@ -431,7 +432,7 @@ $('csvBtn').onclick = () => {
         .concat(assets.map(a => {
             const c = cur(a);
             return [a.code, a.company, a.type, a.name, a.holder, a.dept, a.status, fmt(c.from), daysBetween(c.from, today()),
-                a.config.map(x => x.k + ': ' + x.v).join('; '),
+                a.config.map(x => x.k + ': ' + (x.v || '-') + (x.s ? ' [S/N: ' + x.s + ']' : '')).join('; '),
                 a.history.map(h => h.holder + ' (' + fmt(h.from) + ' - ' + (h.to ? fmt(h.to) : 'Present') + ')').join(' | ')];
         }));
     saveFile('assets-' + today() + '.csv', 'text/csv;charset=utf-8', '\ufeff' + rows.map(r => r.map(q).join(',')).join('\r\n'));
