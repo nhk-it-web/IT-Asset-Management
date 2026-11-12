@@ -33,6 +33,18 @@ td{padding:.7rem .8rem;border-bottom:1px solid #334155;vertical-align:top}
 h1{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:800;margin:0;background:linear-gradient(to right,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
 .toolbar-select{display:flex;gap:.5rem;align-items:end}
 .toolbar-select .fld{flex:1;min-width:0}
+.company-dashboard-row{display:grid;grid-template-columns:minmax(190px,.85fr) minmax(250px,1.15fr) minmax(190px,.85fr);gap:.85rem;align-items:center}
+.company-card{padding:.85rem;min-width:0}
+.company-card .btn{white-space:nowrap}
+.status-dashboard{width:260px;height:260px;max-width:100%;justify-self:center;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:22px;background:conic-gradient(#334155 0deg 360deg);isolation:isolate}
+.status-dashboard:before{content:"";position:absolute;inset:13px;border-radius:50%;background:#1e293b;z-index:-1;border:1px solid #334155}
+.dash-total{font-size:2.35rem;font-weight:850;line-height:1.1;color:#f8fafc}
+.dash-caption{font-size:.75rem;color:#94a3b8;margin:.2rem 0 .65rem}
+.dash-legend{display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;width:100%;max-width:185px}
+.dash-item{font-size:.7rem;display:flex;justify-content:space-between;gap:.35rem;white-space:nowrap}
+.dash-item b{font-size:.78rem}
+@media(max-width:700px){.company-dashboard-row{grid-template-columns:1fr 1fr}.status-dashboard{grid-column:1/-1;grid-row:1;width:230px;height:230px}.company-card{padding:.75rem}}
+@media(max-width:420px){.company-dashboard-row{grid-template-columns:1fr}.status-dashboard{grid-column:1;grid-row:1}.company-card{grid-column:1}}
 @media(max-width:520px){body{padding:1rem .65rem}.toolbar-select{align-items:stretch}.toolbar-select .btn{margin:0}}
 </style>
 </head>
@@ -40,19 +52,18 @@ h1{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:800;margin:0;background:linear
 <div class="wrap">
   <div style="text-align:center;border-bottom:1px solid #1e293b;padding-bottom:1.25rem"><h1>IT Asset Management</h1></div>
   <div id="msg"></div>
-  <div id="stats" class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1rem;text-align:center"></div>
-
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-    <div class="card">
+  <div class="company-dashboard-row">
+    <div class="card company-card">
       <label class="lbl" style="font-size:.9rem;font-weight:600;color:#34d399">Select Company</label>
       <div class="toolbar-select">
         <select id="company" class="fld" style="cursor:pointer"></select>
         <button id="delCompany" class="btn b-red" type="button">Delete</button>
       </div>
     </div>
-    <div class="card">
+    <div id="stats" class="status-dashboard" aria-label="Asset status dashboard"></div>
+    <div class="card company-card">
       <label class="lbl" style="font-size:.9rem;font-weight:600;color:#fbbf24">Add New Company</label>
-      <div style="display:flex;gap:.6rem"><input id="newCompany" class="fld" placeholder="e.g. Sunrise"><button id="addCompany" class="btn b-pur" style="padding:.6rem 1rem">Add</button></div>
+      <div style="display:flex;gap:.45rem"><input id="newCompany" class="fld" placeholder="e.g. Sunrise"><button id="addCompany" class="btn b-pur" style="padding:.6rem .8rem">Add</button></div>
     </div>
   </div>
 
@@ -406,8 +417,19 @@ $('modal').addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 function stats(){
-  $('stats').innerHTML=[['Total Assets',assets.length,'#fff'],...STATUSES.map(s=>[s,assets.filter(a=>a.status===s).length,SC[s]])]
-    .map(([l,n,c])=>`<div><span class="mut">${l}</span><span style="display:block;font-size:2rem;font-weight:800;color:${c}">${n}</span></div>`).join('');
+  const counts=STATUSES.map(s=>({name:s,count:assets.filter(a=>a.status===s).length,color:SC[s]}));
+  const total=assets.length;
+  let cursor=0;
+  const slices=counts.map(x=>{
+    const start=cursor;
+    cursor+=total?(x.count/total)*360:0;
+    return `${x.color} ${start}deg ${cursor}deg`;
+  });
+  const ring=total?`conic-gradient(${slices.join(',')})`:'conic-gradient(#334155 0deg 360deg)';
+  $('stats').innerHTML=`<div class="dash-total">${total}</div>
+    <div class="dash-caption">TOTAL ASSETS</div>
+    <div class="dash-legend">${counts.map(x=>`<div class="dash-item"><span style="color:${x.color}">● ${esc(x.name)}</span><b>${x.count}</b></div>`).join('')}</div>`;
+  $('stats').style.background=ring;
 }
 function saveFile(name,mime,text){
   const a=document.createElement('a');const url=URL.createObjectURL(new Blob([text],{type:mime}));
